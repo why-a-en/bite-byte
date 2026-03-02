@@ -16,6 +16,8 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    // Use MIGRATION_DATABASE_URL (superuser) for migrations if set,
+    // falling back to DATABASE_URL (application user, non-superuser)
+    url: process.env["MIGRATION_DATABASE_URL"] ?? process.env["DATABASE_URL"],
   },
 });
