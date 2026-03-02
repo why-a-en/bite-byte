@@ -19,7 +19,7 @@ const updateVenueSchema = z.object({
     .string()
     .regex(/^[a-z0-9-]+$/, 'Slug must be lowercase letters, numbers, and hyphens only')
     .optional(),
-  paymentMode: z.enum(['PREPAY', 'PAY_AT_COUNTER', 'BOTH']).optional(),
+  paymentMode: z.enum(['PREPAY_REQUIRED', 'PAY_AT_COUNTER', 'BOTH']).optional(),
 });
 
 export type VenueFormState = {
