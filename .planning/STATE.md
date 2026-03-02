@@ -9,31 +9,35 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 
 ## Current Position
 
-Phase: 1 of 4 (Foundation)
-Plan: 0 of ? in current phase
-Status: Ready to plan
-Last activity: 2026-03-02 — Roadmap created (4 phases, 34/34 requirements mapped)
-
-Progress: [░░░░░░░░░░] 0%
+**Current Phase:** 1
+**Current Phase Name:** Foundation
+**Total Phases:** 4
+**Current Plan:** 2
+**Total Plans in Phase:** 7
+**Status:** Ready to execute
+**Last Activity:** 2026-03-02
+**Last Activity Description:** Plan 01-01 complete (monorepo foundation scaffolded)
+**Progress:** [███░░░░░░░] 25%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
-- Average duration: —
-- Total execution time: —
+- Total plans completed: 1
+- Average duration: 5min
+- Total execution time: 5min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 01-foundation | 1/7 | 5min | 5min |
 
 **Recent Trend:**
-- Last 5 plans: —
+- Last 5 plans: 01-01 (5min)
 - Trend: —
 
 *Updated after each plan completion*
+| Phase 1 P1 | 5min | 2 tasks | 31 files |
 
 ## Accumulated Context
 
@@ -46,6 +50,10 @@ Recent decisions affecting current work:
 - Payment state is webhook-driven only — `payment_intent.succeeded` is the sole trigger for RECEIVED status
 - Shared-schema multi-tenancy with Prisma query extension + PostgreSQL RLS as security backstop
 - Prisma 7 (Rust-free) chosen over Drizzle for solo-developer DX (Studio, auto-migrations)
+- @nestjs/config uses own version scheme (4.x), not NestJS framework versioning (11.x)
+- rootDir/outDir must be set in app-level tsconfig, not shared packages/tsconfig/nestjs.json (resolves relative to shared file location)
+- [Phase 1]: @nestjs/config uses own version scheme (4.x), separate from NestJS framework versioning (11.x) — plan specs were wrong
+- [Phase 1]: rootDir/outDir must be set in app-level tsconfig.json, not shared packages/tsconfig/nestjs.json — TypeScript resolves paths relative to the config file location
 
 ### Pending Todos
 
@@ -59,6 +67,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-02
-Stopped at: Roadmap created, ready to plan Phase 1
+**Paused At:** None
+Last session: 2026-03-03
+**Stopped At:** Completed 01-01-PLAN.md
 Resume file: None

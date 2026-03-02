@@ -58,7 +58,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Infrastructure
 
-- [ ] **INFR-01**: Multi-tenant data isolation — each venue's data is scoped and inaccessible to other venues
+- [x] **INFR-01**: Multi-tenant data isolation — each venue's data is scoped and inaccessible to other venues
 - [ ] **INFR-02**: Payment state is driven exclusively by Stripe webhooks (never client-side)
 - [ ] **INFR-03**: Order records snapshot item prices at time of order (not references to mutable menu prices)
 
@@ -140,7 +140,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ANLY-01 | Phase 4 | Pending |
 | ANLY-02 | Phase 4 | Pending |
 | ANLY-03 | Phase 4 | Pending |
-| INFR-01 | Phase 1 | Pending |
+| INFR-01 | Phase 1 | Complete |
 | INFR-02 | Phase 1 | Pending |
 | INFR-03 | Phase 1 | Pending |
 
