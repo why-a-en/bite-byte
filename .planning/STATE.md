@@ -12,12 +12,12 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 **Current Phase:** 2
 **Current Phase Name:** Auth and Venue Setup
 **Total Phases:** 4
-**Current Plan:** 3
+**Current Plan:** 4
 **Total Plans in Phase:** 5
 **Status:** Ready to execute
 **Last Activity:** 2026-03-02
 **Last Activity Description:** Phase 2 Plan 01 complete — NestJS auth module with JWT
-**Progress:** [███████░░░] 67%
+**Progress:** [████████░░] 78%
 
 ## Performance Metrics
 
@@ -43,6 +43,7 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 | Phase 01-foundation P04 | 90min | 2 tasks | 10 files |
 | Phase 02-auth-and-venue-setup P01 | 7min | 2 tasks | 14 files |
 | Phase 02-auth-and-venue-setup P02 | 5min | 2 tasks | 10 files |
+| Phase 02-auth-and-venue-setup P03 | 6min | 2 tasks | 16 files |
 
 ## Accumulated Context
 
@@ -78,6 +79,9 @@ Recent decisions affecting current work:
 - [Phase 02-02]: Category delete returns 409 if items exist to prevent accidental data loss
 - [Phase 02-02]: MenuItem.venueId set on creation as denormalization for Phase 3 RLS customer queries
 - [Phase 02-02]: PATCH reorder route declared before PATCH :id route — NestJS matches in declaration order
+- [Phase 02-03]: shadcn new-york style initialized from apps/web/ directory; Tailwind v4 CSS-first with @import pattern; jose jwtVerify in middleware for Edge Runtime compatibility
+- [Phase 02-03]: useActionState (React 19) primary form state + react-hook-form for client-side validation before server action submission
+- [Phase 02-03]: Middleware deletes access_token cookie on invalid JWT before redirecting — prevents stale cookie redirect loops
 
 ### Pending Todos
 
@@ -93,5 +97,5 @@ None yet.
 
 **Paused At:** None
 Last session: 2026-03-03
-**Stopped At:** Completed 02-auth-and-venue-setup/02-02-PLAN.md
+**Stopped At:** Completed 02-auth-and-venue-setup/02-03-PLAN.md
 Resume file: None
