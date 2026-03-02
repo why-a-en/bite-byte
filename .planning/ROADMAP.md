@@ -29,7 +29,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. The `order_items` table stores `unit_price_at_order` and `item_name_at_order` as immutable columns, not foreign key references to the live menu
   4. The `menu_items` table has a JSONB `metadata` column and `order_items` has a JSONB `selected_modifiers` column (empty array for v1), ready for future modifier support without a schema migration
   5. The `payments` idempotency table exists (for webhook deduplication) and is referenced in Stripe webhook handler stub
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Turborepo monorepo scaffold: root config, shared tsconfig, shared types package, Next.js + NestJS app skeletons, Docker Compose
+- [ ] 01-02-PLAN.md — Prisma schema + initial migration: complete entity schema with JSONB hooks and price snapshot columns, Docker PostgreSQL migration
+- [ ] 01-03-PLAN.md — Multi-tenant isolation: PrismaModule, ClsModule, Prisma $extends tenant extension, TenantMiddleware, PostgreSQL RLS policies
+- [ ] 01-04-PLAN.md — Stripe webhook stub + tenant isolation test: idempotency-guarded webhook handler, Vitest setup, cross-tenant isolation integration test
 
 ### Phase 2: Auth and Venue Setup
 **Goal**: A venue owner can create an account, log in, configure one or more venues with payment preferences, and build a complete menu with photos
@@ -73,7 +79,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/? | Not started | - |
+| 1. Foundation | 0/4 | Not started | - |
 | 2. Auth and Venue Setup | 0/? | Not started | - |
 | 3. Customer Ordering | 0/? | Not started | - |
 | 4. Real-Time Operations and Analytics | 0/? | Not started | - |
