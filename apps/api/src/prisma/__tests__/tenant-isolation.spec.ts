@@ -24,6 +24,7 @@ describe('Tenant isolation', () => {
   let adminTenantPrisma: ReturnType<typeof createTenantPrismaExtension>;
   let venueAId: string;
   let venueBId: string;
+  let testOwnerId: string;
 
   beforeAll(async () => {
     // Bootstrap a minimal NestJS test module for CLS
@@ -59,12 +60,22 @@ describe('Tenant isolation', () => {
       clsService as ClsService,
     );
 
+    // Create a test owner user (Venue now requires ownerId FK to users)
+    const testOwner = await adminPrisma.user.create({
+      data: {
+        email: `test-owner-isolation-${Date.now()}@test.com`,
+        passwordHash: 'not-a-real-hash-for-tests-only',
+      },
+    });
+    testOwnerId = testOwner.id;
+
     // Create two test venues using adminPrisma (superuser bypasses RLS on INSERT).
     const venueA = await adminPrisma.venue.create({
       data: {
         name: 'Venue A (isolation test)',
         slug: `venue-a-test-${Date.now()}`,
         paymentMode: 'BOTH',
+        ownerId: testOwnerId,
       },
     });
     const venueB = await adminPrisma.venue.create({
@@ -72,6 +83,7 @@ describe('Tenant isolation', () => {
         name: 'Venue B (isolation test)',
         slug: `venue-b-test-${Date.now()}`,
         paymentMode: 'BOTH',
+        ownerId: testOwnerId,
       },
     });
     venueAId = venueA.id;
@@ -84,6 +96,9 @@ describe('Tenant isolation', () => {
       await adminPrisma.venue.deleteMany({
         where: { id: { in: [venueAId, venueBId].filter(Boolean) } },
       });
+    }
+    if (testOwnerId) {
+      await adminPrisma.user.deleteMany({ where: { id: testOwnerId } });
     }
     await appPrisma.$disconnect();
     await adminPrisma.$disconnect();
