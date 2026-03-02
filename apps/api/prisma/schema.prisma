@@ -38,15 +38,29 @@ enum PaymentMethod {
 // Models
 // ---------------------------------------------------------------------------
 
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  venues Venue[]
+
+  @@map("users")
+}
+
 model Venue {
   id          String      @id @default(uuid()) @db.Uuid
   name        String
   slug        String      @unique
   logoUrl     String?     @map("logo_url")
   paymentMode PaymentMode @default(BOTH) @map("payment_mode")
+  ownerId     String      @map("owner_id") @db.Uuid
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt @map("updated_at")
 
+  owner      User           @relation(fields: [ownerId], references: [id])
   categories MenuCategory[]
   orders     Order[]
 
