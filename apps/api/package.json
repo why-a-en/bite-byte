@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "nest start --watch",
     "build": "nest build",
-    "type-check": "tsc --noEmit -p tsconfig.json"
+    "type-check": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@bite-byte/types": "workspace:*",
@@ -16,15 +18,21 @@
     "@prisma/client": "^7.0.0",
     "nestjs-cls": "^6.0.0",
     "prisma": "^7.0.0",
-    "reflect-metadata": "^0.2.0"
+    "reflect-metadata": "^0.2.0",
+    "stripe": "^17.0.0"
   },
   "devDependencies": {
     "@bite-byte/tsconfig": "workspace:*",
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
+    "@nestjs/testing": "^11.0.0",
+    "@swc/core": "^1.0.0",
     "@types/express": "^5.0.0",
     "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^2.0.0",
     "dotenv": "^17.3.1",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "unplugin-swc": "^1.0.0",
+    "vitest": "^2.0.0"
   }
 }
