@@ -9,9 +9,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Authentication
 
-- [ ] **AUTH-01**: Venue owner can create an account with email and password
-- [ ] **AUTH-02**: Venue owner can log in and stay logged in across browser refresh
-- [ ] **AUTH-03**: Venue owner can log out from any page
+- [x] **AUTH-01**: Venue owner can create an account with email and password
+- [x] **AUTH-02**: Venue owner can log in and stay logged in across browser refresh
+- [x] **AUTH-03**: Venue owner can log out from any page
 
 ### Venue Setup
 
@@ -109,9 +109,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 2 | Pending |
-| AUTH-02 | Phase 2 | Pending |
-| AUTH-03 | Phase 2 | Pending |
+| AUTH-01 | Phase 2 | Complete |
+| AUTH-02 | Phase 2 | Complete |
+| AUTH-03 | Phase 2 | Complete |
 | VNUE-01 | Phase 2 | Pending |
 | VNUE-02 | Phase 2 | Pending |
 | VNUE-03 | Phase 2 | Pending |

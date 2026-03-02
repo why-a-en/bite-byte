@@ -5,19 +5,19 @@
 See: .planning/PROJECT.md (updated 2026-03-02)
 
 **Core value:** Customers can go from scanning a QR code to having their order in the kitchen in under 60 seconds, with zero friction and zero staff interaction.
-**Current focus:** Phase 1 — Foundation
+**Current focus:** Phase 2 — Auth and Venue Setup
 
 ## Current Position
 
-**Current Phase:** 1
-**Current Phase Name:** Foundation
+**Current Phase:** 2
+**Current Phase Name:** Auth and Venue Setup
 **Total Phases:** 4
-**Current Plan:** Not started
-**Total Plans in Phase:** 7
-**Status:** Milestone complete
-**Last Activity:** 2026-03-02
-**Last Activity Description:** Phase 1 complete
-**Progress:** [██████████] 100%
+**Current Plan:** 2
+**Total Plans in Phase:** 5
+**Status:** In progress
+**Last Activity:** 2026-03-03
+**Last Activity Description:** Phase 2 Plan 01 complete — NestJS auth module with JWT
+**Progress:** [██████████] 20%
 
 ## Performance Metrics
 
@@ -41,6 +41,7 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 | Phase 01-foundation P02 | 21min | 2 tasks | 8 files |
 | Phase 01-foundation P03 | 6min | 2 tasks | 6 files |
 | Phase 01-foundation P04 | 90min | 2 tasks | 10 files |
+| Phase 02-auth-and-venue-setup P01 | 7min | 2 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,11 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: [Phase 01-04]: All API tests must run inside Docker on bite-byte_default network — WSL2 Docker Desktop proxy blocks SCRAM-SHA-256 auth for Node.js pg client connecting to localhost:5433
 - [Phase 01-foundation]: [Phase 01-04]: Prisma 7 requires PrismaPg adapter — new PrismaClient({ adapter: new PrismaPg({ connectionString }) }); no-args constructor throws in Rust-free mode
 - [Phase 01-foundation]: [Phase 01-04]: Stripe webhook idempotency pattern — stripeEvent.findUnique check before stripeEvent.create; unique DB constraint as atomic race-condition guard; full handler deferred to Phase 3
+- [Phase 02-01]: JWT_SECRET validated at JwtStrategy startup — throws Error if undefined, preventing silent auth misconfiguration
+- [Phase 02-01]: Users table has NO RLS — users are not tenant-scoped; Venue.ownerId enforced at application query layer via WHERE ownerId = req.user.userId
+- [Phase 02-01]: Single 7-day JWT for v1 (no refresh tokens) — owner devices trusted, complexity unwarranted at this stage
+- [Phase 02-01]: Docker migration pattern requires full node_modules — bare node:22-alpine container can't load prisma.config.ts; fallback to manual SQL + psql + _prisma_migrations INSERT
+- [Phase 02-01]: JwtModule.register global: true — downstream modules inject JwtService without re-importing JwtModule
 
 ### Pending Todos
 
@@ -82,5 +88,5 @@ None yet.
 
 **Paused At:** None
 Last session: 2026-03-03
-**Stopped At:** Phase 2 context gathered
+**Stopped At:** Completed 02-auth-and-venue-setup/02-01-PLAN.md
 Resume file: None
