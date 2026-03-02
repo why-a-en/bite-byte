@@ -187,3 +187,19 @@ None — the `bitebyte_app` PostgreSQL role was created during execution. The `.
 ---
 *Phase: 01-foundation*
 *Completed: 2026-03-03*
+
+## Self-Check: PASSED
+
+All created files confirmed present on disk:
+- `apps/api/src/webhooks/stripe-webhook.stub.ts` - FOUND
+- `apps/api/src/webhooks/webhooks.module.ts` - FOUND
+- `apps/api/src/prisma/__tests__/tenant-isolation.spec.ts` - FOUND
+- `apps/api/vitest.config.ts` - FOUND
+- `apps/api/vitest.setup.ts` - FOUND
+- `scripts/run-api-tests.sh` - FOUND
+- `.planning/phases/01-foundation/01-04-SUMMARY.md` - FOUND
+
+All commits confirmed in git log:
+- `07ace42` - feat(01-04): add Stripe webhook stub with idempotency check - FOUND
+- `82fea38` - feat(01-04): add Vitest infrastructure and tenant-isolation integration test - FOUND
+- `ed1af96` - docs(01-04): complete Stripe webhook stub and tenant isolation plan - FOUND
