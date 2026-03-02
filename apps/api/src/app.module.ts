@@ -8,6 +8,7 @@ import { TenantMiddleware } from './common/middleware/tenant.middleware';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { VenuesModule } from './venues/venues.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UsersModule } from './users/users.module';
     WebhooksModule,
     AuthModule,
     UsersModule,
+    VenuesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
