@@ -1,0 +1,6 @@
+{
+  "name": "@bite-byte/tsconfig",
+  "version": "0.0.1",
+  "files": ["*.json"],
+  "license": "MIT"
+}
