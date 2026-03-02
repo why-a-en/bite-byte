@@ -9,6 +9,8 @@ import { WebhooksModule } from './webhooks/webhooks.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { VenuesModule } from './venues/venues.module';
+import { CategoriesModule } from './categories/categories.module';
+import { ItemsModule } from './items/items.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { VenuesModule } from './venues/venues.module';
     AuthModule,
     UsersModule,
     VenuesModule,
+    CategoriesModule,
+    ItemsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
