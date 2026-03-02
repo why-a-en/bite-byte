@@ -12,12 +12,12 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 **Current Phase:** 1
 **Current Phase Name:** Foundation
 **Total Phases:** 4
-**Current Plan:** 3
+**Current Plan:** 4
 **Total Plans in Phase:** 7
 **Status:** Ready to execute
 **Last Activity:** 2026-03-02
 **Last Activity Description:** Plan 01-01 complete (monorepo foundation scaffolded)
-**Progress:** [█████░░░░░] 50%
+**Progress:** [████████░░] 75%
 
 ## Performance Metrics
 
@@ -39,6 +39,7 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 *Updated after each plan completion*
 | Phase 1 P1 | 5min | 2 tasks | 31 files |
 | Phase 01-foundation P02 | 21min | 2 tasks | 8 files |
+| Phase 01-foundation P03 | 6min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -58,6 +59,9 @@ Recent decisions affecting current work:
 - [Phase 01]: Prisma 7 removes datasource url from schema.prisma — URL now in prisma.config.ts only (breaking change vs Prisma 5/6)
 - [Phase 01]: Docker postgres mapped to port 5433 (not 5432) — local PostgreSQL 14 occupies 5432 on this WSL2 machine
 - [Phase 01]: WSL2 Docker Desktop proxy fails SCRAM-SHA-256 auth through Windows port forwarding — prisma migrate dev must run inside a Docker container on the same network using service hostname (bite-byte-postgres-1)
+- [Phase 01-foundation]: Prisma client imported from custom output path (../generated/prisma/client) not @prisma/client — Prisma 7 custom generator output requires direct path import
+- [Phase 01-foundation]: RLS migration timestamp must be after init migration — 20260302173901_add_rls ensures correct apply order in fresh deployments (plan specified 20260302000001 which would fail on tables-not-yet-created)
+- [Phase 01-foundation]: RLS verification requires pg_class.relforcerowsecurity — pg_tables view does not have forcerowsecurity column in PostgreSQL 16
 
 ### Pending Todos
 
@@ -73,5 +77,5 @@ None yet.
 
 **Paused At:** None
 Last session: 2026-03-03
-**Stopped At:** Completed 01-02-PLAN.md
+**Stopped At:** Completed 01-03-PLAN.md
 Resume file: None
