@@ -17,7 +17,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **VNUE-01**: Venue owner can create a venue with name, logo, and URL slug
 - [x] **VNUE-02**: Venue owner can configure payment preference (prepay required vs. pay at counter vs. both)
-- [ ] **VNUE-03**: Venue owner can generate and download a QR code linking to their venue's menu
+- [x] **VNUE-03**: Venue owner can generate and download a QR code linking to their venue's menu
 - [x] **VNUE-04**: Venue owner can manage multiple venues under one account
 
 ### Menu Management
@@ -26,7 +26,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **MENU-02**: Venue owner can reorder categories via drag-and-drop
 - [x] **MENU-03**: Venue owner can create menu items with name, description, price, and photo
 - [x] **MENU-04**: Venue owner can edit and delete menu items
-- [ ] **MENU-05**: Venue owner can upload item photos that are optimized and served via CDN
+- [x] **MENU-05**: Venue owner can upload item photos that are optimized and served via CDN
 - [x] **MENU-06**: Venue owner can toggle item availability (86 an item without deleting it)
 
 ### Customer Ordering
@@ -114,13 +114,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-03 | Phase 2 | Complete |
 | VNUE-01 | Phase 2 | Complete |
 | VNUE-02 | Phase 2 | Complete |
-| VNUE-03 | Phase 2 | Pending |
+| VNUE-03 | Phase 2 | Complete |
 | VNUE-04 | Phase 2 | Complete |
 | MENU-01 | Phase 2 | Complete |
 | MENU-02 | Phase 2 | Complete |
 | MENU-03 | Phase 2 | Complete |
 | MENU-04 | Phase 2 | Complete |
-| MENU-05 | Phase 2 | Pending |
+| MENU-05 | Phase 2 | Complete |
 | MENU-06 | Phase 2 | Complete |
 | ORDR-01 | Phase 3 | Pending |
 | ORDR-02 | Phase 3 | Pending |

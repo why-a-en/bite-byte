@@ -12,12 +12,12 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 **Current Phase:** 2
 **Current Phase Name:** Auth and Venue Setup
 **Total Phases:** 4
-**Current Plan:** 4
+**Current Plan:** 5
 **Total Plans in Phase:** 5
-**Status:** Ready to execute
+**Status:** Phase complete — ready for verification
 **Last Activity:** 2026-03-02
 **Last Activity Description:** Phase 2 Plan 01 complete — NestJS auth module with JWT
-**Progress:** [████████░░] 78%
+**Progress:** [██████████] 100%
 
 ## Performance Metrics
 
@@ -44,6 +44,8 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 | Phase 02-auth-and-venue-setup P01 | 7min | 2 tasks | 14 files |
 | Phase 02-auth-and-venue-setup P02 | 5min | 2 tasks | 10 files |
 | Phase 02-auth-and-venue-setup P03 | 6min | 2 tasks | 16 files |
+| Phase 02-auth-and-venue-setup P04 | 7min | 2 tasks | 18 files |
+| Phase 02-auth-and-venue-setup P05 | 5min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -82,6 +84,13 @@ Recent decisions affecting current work:
 - [Phase 02-03]: shadcn new-york style initialized from apps/web/ directory; Tailwind v4 CSS-first with @import pattern; jose jwtVerify in middleware for Edge Runtime compatibility
 - [Phase 02-03]: useActionState (React 19) primary form state + react-hook-form for client-side validation before server action submission
 - [Phase 02-03]: Middleware deletes access_token cookie on invalid JWT before redirecting — prevents stale cookie redirect loops
+- [Phase 02-04]: Dashboard Server Component layout fetches venues once and passes to Sidebar Client Component — avoids duplicate API calls per page
+- [Phase 02-04]: QR code PNG download uses Route Handler (not server action) — binary responses require Response object, not serializable server action return
+- [Phase 02-04]: Vercel Blob upload gracefully degrades when BLOB_READ_WRITE_TOKEN missing — returns descriptive error rather than crashing
+- [Phase 02-05]: Stable UUID IDs for SortableContext (category.id not array index) prevents dnd-kit collision on reorder
+- [Phase 02-05]: @dnd-kit/modifiers not installed — restrictToVerticalAxis removed; vertical constraint not required for correctness
+- [Phase 02-05]: Photo upload silently skipped without BLOB_READ_WRITE_TOKEN — imageUrl stays null in dev, no crash or error
+- [Phase 02-05]: Optimistic availability toggle with rollback — fast one-click UX, rollback on API failure
 
 ### Pending Todos
 
@@ -97,5 +106,5 @@ None yet.
 
 **Paused At:** None
 Last session: 2026-03-03
-**Stopped At:** Completed 02-auth-and-venue-setup/02-03-PLAN.md
+**Stopped At:** Completed 02-auth-and-venue-setup/02-05-PLAN.md
 Resume file: None
