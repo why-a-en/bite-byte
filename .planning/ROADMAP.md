@@ -47,7 +47,14 @@ Plans:
   3. Venue owner can configure payment mode (prepay required / pay at counter / both) and the ordering flow for that venue respects the setting
   4. Venue owner can generate and download a QR code (PNG) that links to their venue's public menu URL
   5. Venue owner can create, edit, reorder (drag-and-drop), and delete menu categories, and create menu items with name, description, price, and an uploaded photo; can toggle any item as unavailable without deleting it
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — User model migration + NestJS AuthModule (register, login, JWT strategies, guards)
+- [ ] 02-02-PLAN.md — Venue/Category/Item CRUD API modules with owner-scoped queries and JwtAuthGuard
+- [ ] 02-03-PLAN.md — shadcn/ui + Tailwind v4 init, Next.js auth middleware, login/register pages with server actions
+- [ ] 02-04-PLAN.md — Dashboard layout with sidebar, venue management UI, Vercel Blob logo upload, QR code generation
+- [ ] 02-05-PLAN.md — Menu builder UI with drag-and-drop category reorder, item CRUD with photo upload, availability toggle
 
 ### Phase 3: Customer Ordering
 **Goal**: A customer can scan a QR code, browse the menu, build a cart, place an order (paying online or at counter depending on the venue), and track their order status in real-time
@@ -80,6 +87,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete    | 2026-03-02 |
-| 2. Auth and Venue Setup | 0/? | Not started | - |
+| 2. Auth and Venue Setup | 0/5 | Not started | - |
 | 3. Customer Ordering | 0/? | Not started | - |
 | 4. Real-Time Operations and Analytics | 0/? | Not started | - |
