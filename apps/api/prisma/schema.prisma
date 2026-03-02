@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum PaymentMode {
+  PREPAY_REQUIRED
+  PAY_AT_COUNTER
+  BOTH
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  RECEIVED
+  PREPARING
+  READY
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  STRIPE
+  PAY_AT_COUNTER
+}
+
+// ---------------------------------------------------------------------------
+// Models
+// ---------------------------------------------------------------------------
+
+model Venue {
+  id          String      @id @default(uuid()) @db.Uuid
+  name        String
+  slug        String      @unique
+  logoUrl     String?     @map("logo_url")
+  paymentMode PaymentMode @default(BOTH) @map("payment_mode")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  categories MenuCategory[]
+  orders     Order[]
+
+  @@map("venues")
+}
+
+model MenuCategory {
+  id        String   @id @default(uuid()) @db.Uuid
+  venueId   String   @map("venue_id") @db.Uuid
+  name      String
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  venue Venue      @relation(fields: [venueId], references: [id])
+  items MenuItem[]
+
+  @@map("menu_categories")
+}
+
+model MenuItem {
+  id          String   @id @default(uuid()) @db.Uuid
+  venueId     String   @map("venue_id") @db.Uuid
+  categoryId  String   @map("category_id") @db.Uuid
+  name        String
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  imageUrl    String?  @map("image_url")
+  isAvailable Boolean  @default(true) @map("is_available")
+  sortOrder   Int      @default(0) @map("sort_order")
+  // JSONB extensibility hook — empty object for v1; v2 modifiers stored here
+  metadata    Json     @default("{}") @db.JsonB
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  category   MenuCategory @relation(fields: [categoryId], references: [id])
+  orderItems OrderItem[]
+
+  @@map("menu_items")
+}
+
+model Order {
+  id              String        @id @default(uuid()) @db.Uuid
+  venueId         String        @map("venue_id") @db.Uuid
+  status          OrderStatus   @default(PENDING_PAYMENT)
+  paymentMethod   PaymentMethod @map("payment_method")
+  // paymentIntentId is null for pay-at-counter orders
+  paymentIntentId String?       @map("payment_intent_id")
+  totalAmount     Decimal       @db.Decimal(10, 2) @map("total_amount")
+  referenceCode   String        @unique @map("reference_code")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  venue Venue       @relation(fields: [venueId], references: [id])
+  items OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id               String   @id @default(uuid()) @db.Uuid
+  orderId          String   @map("order_id") @db.Uuid
+  // Nullable FK to menu_items — kept for analytics linkage only
+  // NULL if item was deleted after order was placed
+  menuItemId       String?  @map("menu_item_id") @db.Uuid
+  // SNAPSHOT columns — these NEVER change after order creation (INFR-03)
+  itemNameAtOrder  String   @map("item_name_at_order")
+  unitPriceAtOrder Decimal  @db.Decimal(10, 2) @map("unit_price_at_order")
+  quantity         Int
+  // JSONB — empty array for v1; v2 modifier selections stored here
+  selectedModifiers Json    @default("[]") @db.JsonB @map("selected_modifiers")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  order    Order     @relation(fields: [orderId], references: [id])
+  menuItem MenuItem? @relation(fields: [menuItemId], references: [id], onDelete: SetNull)
+
+  @@map("order_items")
+}
+
+// Stripe webhook idempotency table — prevents duplicate order processing
+// on Stripe retry (up to 72h retry window) (INFR-02)
+model StripeEvent {
+  id            String   @id @default(uuid()) @db.Uuid
+  stripeEventId String   @unique @map("stripe_event_id")
+  processedAt   DateTime @default(now()) @map("processed_at")
+  eventType     String   @map("event_type")
+
+  @@map("stripe_events")
+}
