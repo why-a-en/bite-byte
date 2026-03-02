@@ -12,12 +12,12 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 **Current Phase:** 1
 **Current Phase Name:** Foundation
 **Total Phases:** 4
-**Current Plan:** 4
+**Current Plan:** 5
 **Total Plans in Phase:** 7
 **Status:** Ready to execute
 **Last Activity:** 2026-03-02
 **Last Activity Description:** Plan 01-01 complete (monorepo foundation scaffolded)
-**Progress:** [████████░░] 75%
+**Progress:** [██████████] 100%
 
 ## Performance Metrics
 
@@ -40,6 +40,7 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 | Phase 1 P1 | 5min | 2 tasks | 31 files |
 | Phase 01-foundation P02 | 21min | 2 tasks | 8 files |
 | Phase 01-foundation P03 | 6min | 2 tasks | 6 files |
+| Phase 01-foundation P04 | 90min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,10 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: Prisma client imported from custom output path (../generated/prisma/client) not @prisma/client — Prisma 7 custom generator output requires direct path import
 - [Phase 01-foundation]: RLS migration timestamp must be after init migration — 20260302173901_add_rls ensures correct apply order in fresh deployments (plan specified 20260302000001 which would fail on tables-not-yet-created)
 - [Phase 01-foundation]: RLS verification requires pg_class.relforcerowsecurity — pg_tables view does not have forcerowsecurity column in PostgreSQL 16
+- [Phase 01-foundation]: [Phase 01-04]: Dual-PrismaClient test pattern — adminPrisma (superuser) for setup/teardown bypassing RLS, appPrisma (bitebyte_app non-superuser) for isolation assertions; PostgreSQL superusers bypass ALL RLS
+- [Phase 01-foundation]: [Phase 01-04]: All API tests must run inside Docker on bite-byte_default network — WSL2 Docker Desktop proxy blocks SCRAM-SHA-256 auth for Node.js pg client connecting to localhost:5433
+- [Phase 01-foundation]: [Phase 01-04]: Prisma 7 requires PrismaPg adapter — new PrismaClient({ adapter: new PrismaPg({ connectionString }) }); no-args constructor throws in Rust-free mode
+- [Phase 01-foundation]: [Phase 01-04]: Stripe webhook idempotency pattern — stripeEvent.findUnique check before stripeEvent.create; unique DB constraint as atomic race-condition guard; full handler deferred to Phase 3
 
 ### Pending Todos
 
@@ -77,5 +82,5 @@ None yet.
 
 **Paused At:** None
 Last session: 2026-03-03
-**Stopped At:** Completed 01-03-PLAN.md
+**Stopped At:** Completed 01-04-PLAN.md
 Resume file: None
