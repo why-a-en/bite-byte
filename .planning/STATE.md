@@ -12,12 +12,12 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 **Current Phase:** 2
 **Current Phase Name:** Auth and Venue Setup
 **Total Phases:** 4
-**Current Plan:** 2
+**Current Plan:** 3
 **Total Plans in Phase:** 5
-**Status:** In progress
-**Last Activity:** 2026-03-03
+**Status:** Ready to execute
+**Last Activity:** 2026-03-02
 **Last Activity Description:** Phase 2 Plan 01 complete — NestJS auth module with JWT
-**Progress:** [██████████] 20%
+**Progress:** [███████░░░] 67%
 
 ## Performance Metrics
 
@@ -42,6 +42,7 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 | Phase 01-foundation P03 | 6min | 2 tasks | 6 files |
 | Phase 01-foundation P04 | 90min | 2 tasks | 10 files |
 | Phase 02-auth-and-venue-setup P01 | 7min | 2 tasks | 14 files |
+| Phase 02-auth-and-venue-setup P02 | 5min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -73,6 +74,10 @@ Recent decisions affecting current work:
 - [Phase 02-01]: Single 7-day JWT for v1 (no refresh tokens) — owner devices trusted, complexity unwarranted at this stage
 - [Phase 02-01]: Docker migration pattern requires full node_modules — bare node:22-alpine container can't load prisma.config.ts; fallback to manual SQL + psql + _prisma_migrations INSERT
 - [Phase 02-01]: JwtModule.register global: true — downstream modules inject JwtService without re-importing JwtModule
+- [Phase 02-02]: Venue ownership check inlined in CategoriesService and ItemsService to avoid circular module dependencies
+- [Phase 02-02]: Category delete returns 409 if items exist to prevent accidental data loss
+- [Phase 02-02]: MenuItem.venueId set on creation as denormalization for Phase 3 RLS customer queries
+- [Phase 02-02]: PATCH reorder route declared before PATCH :id route — NestJS matches in declaration order
 
 ### Pending Todos
 
@@ -88,5 +93,5 @@ None yet.
 
 **Paused At:** None
 Last session: 2026-03-03
-**Stopped At:** Completed 02-auth-and-venue-setup/02-01-PLAN.md
+**Stopped At:** Completed 02-auth-and-venue-setup/02-02-PLAN.md
 Resume file: None
