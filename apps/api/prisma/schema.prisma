@@ -75,7 +75,7 @@ model MenuCategory {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  venue Venue      @relation(fields: [venueId], references: [id])
+  venue Venue      @relation(fields: [venueId], references: [id], onDelete: Cascade)
   items MenuItem[]
 
   @@map("menu_categories")
@@ -96,7 +96,7 @@ model MenuItem {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  category   MenuCategory @relation(fields: [categoryId], references: [id])
+  category   MenuCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   orderItems OrderItem[]
 
   @@map("menu_items")
@@ -111,10 +111,11 @@ model Order {
   paymentIntentId String?       @map("payment_intent_id")
   totalAmount     Decimal       @db.Decimal(10, 2) @map("total_amount")
   referenceCode   String        @unique @map("reference_code")
+  customerName    String        @map("customer_name")
   createdAt       DateTime      @default(now()) @map("created_at")
   updatedAt       DateTime      @updatedAt @map("updated_at")
 
-  venue Venue       @relation(fields: [venueId], references: [id])
+  venue Venue       @relation(fields: [venueId], references: [id], onDelete: Cascade)
   items OrderItem[]
 
   @@map("orders")
