@@ -2,9 +2,6 @@
 
 import { useActionState } from 'react';
 import Link from 'next/link';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 
 import { registerAction, type AuthFormState } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
@@ -19,32 +16,10 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-const registerSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-});
-
-type RegisterFormValues = z.infer<typeof registerSchema>;
-
 const initialState: AuthFormState = {};
 
 export default function RegisterPage() {
   const [state, formAction, isPending] = useActionState(registerAction, initialState);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterFormValues>({
-    resolver: zodResolver(registerSchema),
-  });
-
-  const onSubmit = handleSubmit((_data, event) => {
-    const form = event?.target as HTMLFormElement;
-    if (form) {
-      form.requestSubmit();
-    }
-  });
 
   return (
     <Card>
@@ -53,7 +28,7 @@ export default function RegisterPage() {
         <CardDescription>Start managing your venue with Bite Byte</CardDescription>
       </CardHeader>
 
-      <form action={formAction} onSubmit={onSubmit}>
+      <form action={formAction}>
         <CardContent className="space-y-4">
           {state.error && (
             <div
@@ -68,15 +43,15 @@ export default function RegisterPage() {
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
+              name="email"
               type="email"
               autoComplete="email"
               placeholder="you@example.com"
-              aria-invalid={!!errors.email || !!state.fieldErrors?.email}
-              {...register('email')}
+              aria-invalid={!!state.fieldErrors?.email}
             />
-            {(errors.email || state.fieldErrors?.email) && (
+            {state.fieldErrors?.email && (
               <p className="text-xs text-destructive">
-                {errors.email?.message ?? state.fieldErrors?.email?.[0]}
+                {state.fieldErrors.email[0]}
               </p>
             )}
           </div>
@@ -85,18 +60,17 @@ export default function RegisterPage() {
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
+              name="password"
               type="password"
               autoComplete="new-password"
               placeholder="••••••••"
-              aria-invalid={!!errors.password || !!state.fieldErrors?.password}
-              {...register('password')}
+              aria-invalid={!!state.fieldErrors?.password}
             />
-            {(errors.password || state.fieldErrors?.password) && (
+            {state.fieldErrors?.password && (
               <p className="text-xs text-destructive">
-                {errors.password?.message ?? state.fieldErrors?.password?.[0]}
+                {state.fieldErrors.password[0]}
               </p>
             )}
-            <p className="text-xs text-muted-foreground">Must be at least 8 characters</p>
           </div>
         </CardContent>
 

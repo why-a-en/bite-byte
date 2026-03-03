@@ -126,4 +126,16 @@
   body {
     @apply bg-background text-foreground;
   }
+  button,
+  [role="button"],
+  a,
+  select,
+  summary,
+  [type="checkbox"],
+  [type="radio"],
+  [type="submit"],
+  [type="reset"],
+  label[for] {
+    cursor: pointer;
+  }
 }
