@@ -11,6 +11,8 @@ import { UsersModule } from './users/users.module';
 import { VenuesModule } from './venues/venues.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ItemsModule } from './items/items.module';
+import { PublicMenuModule } from './public-menu/public-menu.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { ItemsModule } from './items/items.module';
     VenuesModule,
     CategoriesModule,
     ItemsModule,
+    PublicMenuModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

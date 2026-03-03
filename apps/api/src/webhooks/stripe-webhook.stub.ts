@@ -11,13 +11,17 @@ import {
 import { Request } from 'express';
 import Stripe from 'stripe';
 import { PrismaService } from '../prisma/prisma.service';
+import { OrdersService } from '../orders/orders.service';
 
 @Controller('webhooks')
 export class StripeWebhookStub {
   private readonly logger = new Logger(StripeWebhookStub.name);
   private readonly stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? 'sk_test_placeholder');
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly ordersService: OrdersService,
+  ) {}
 
   @Post('stripe')
   @HttpCode(200)
@@ -27,9 +31,8 @@ export class StripeWebhookStub {
   ) {
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
     if (!webhookSecret || !signature || !req.rawBody) {
-      // In Phase 1, STRIPE_WEBHOOK_SECRET may not be set — log and acknowledge
-      this.logger.warn('Stripe webhook received without signature verification (Phase 1 stub)');
-      return { received: true, status: 'stub_no_verification' };
+      this.logger.warn('Stripe webhook received without signature verification — check STRIPE_WEBHOOK_SECRET env var');
+      return { received: true, status: 'no_verification' };
     }
 
     let event: Stripe.Event;
@@ -57,9 +60,31 @@ export class StripeWebhookStub {
       },
     });
 
-    // TODO Phase 3: implement switch(event.type) for payment_intent.succeeded
-    // This will be the SOLE trigger for transitioning orders to RECEIVED status (INFR-02)
-    this.logger.log(`Stripe event ${event.type} acknowledged (stub — full handler in Phase 3)`);
+    switch (event.type) {
+      case 'payment_intent.succeeded': {
+        const paymentIntent = event.data.object as Stripe.PaymentIntent;
+        const orderId = paymentIntent.metadata?.orderId;
+        if (!orderId) {
+          this.logger.warn(`payment_intent.succeeded missing orderId metadata: ${paymentIntent.id}`);
+          break;
+        }
+        await this.ordersService.markOrderReceived(orderId, paymentIntent.id);
+        this.logger.log(`Order ${orderId} marked RECEIVED via webhook`);
+        break;
+      }
+      case 'payment_intent.payment_failed': {
+        const paymentIntent = event.data.object as Stripe.PaymentIntent;
+        const orderId = paymentIntent.metadata?.orderId;
+        if (orderId) {
+          await this.ordersService.cancelOrder(orderId, 'payment_failed');
+          this.logger.log(`Order ${orderId} CANCELLED via payment_failed webhook`);
+        }
+        break;
+      }
+      default:
+        this.logger.log(`Unhandled Stripe event: ${event.type}`);
+    }
+
     return { received: true };
   }
 }
