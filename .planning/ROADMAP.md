@@ -66,7 +66,14 @@ Plans:
   3. For prepay venues, customer completes payment via Stripe (card, Apple Pay, or Google Pay) and the order transitions to RECEIVED only after the `payment_intent.succeeded` webhook fires — never via redirect
   4. For pay-at-counter venues, customer sees clear instructions and the order is created immediately in RECEIVED state
   5. Customer receives an order confirmation page with a unique reference number and can return to the order status page after closing the browser (order ID persisted in localStorage); status page updates in real-time (Pending → Preparing → Ready) as the venue acts on the order
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — NestJS API layer: Prisma migration (customerName), PublicMenuModule, OrdersModule, complete Stripe webhook
+- [ ] 03-02-PLAN.md — Menu page + cart: (menu) route group, item rows, bottom sheet, cart hook, floating button, cart drawer
+- [ ] 03-03-PLAN.md — Checkout + Stripe: checkout page, CheckoutForm, StripePaymentForm, order creation sequence
+- [ ] 03-04-PLAN.md — Order status page: usePolling hook, progress steps, localStorage recovery
+- [ ] 03-05-PLAN.md — Human verification checkpoint: end-to-end ordering flow for all ORDR requirements
 
 ### Phase 4: Real-Time Operations and Analytics
 **Goal**: Venue owner has a live dashboard where incoming orders appear instantly with an audio alert, can update order status that propagates to the customer in real-time, can review order history, and can view basic sales analytics
@@ -88,5 +95,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete    | 2026-03-02 |
 | 2. Auth and Venue Setup | 5/5 | Complete    | 2026-03-02 |
-| 3. Customer Ordering | 0/? | Not started | - |
+| 3. Customer Ordering | 0/5 | Not started | - |
 | 4. Real-Time Operations and Analytics | 0/? | Not started | - |
