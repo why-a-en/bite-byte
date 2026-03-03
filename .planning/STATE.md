@@ -12,12 +12,12 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 **Current Phase:** 3
 **Current Phase Name:** Customer Ordering
 **Total Phases:** 4
-**Current Plan:** 2
+**Current Plan:** 3
 **Total Plans in Phase:** 4
 **Status:** Ready to execute
 **Last Activity:** 2026-03-03
 **Last Activity Description:** Phase 3 Plan 01 complete — NestJS ordering API
-**Progress:** [████████░░] 79%
+**Progress:** [█████████░] 86%
 
 ## Performance Metrics
 
@@ -48,6 +48,7 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 | Phase 02-auth-and-venue-setup P05 | 5min | 2 tasks | 8 files |
 | Phase 03-customer-ordering P01 | 8min | 2 tasks | 11 files |
 | Phase 03-customer-ordering P02 | 3min | 2 tasks | 13 files |
+| Phase 03-customer-ordering P03 | 2min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -99,6 +100,9 @@ Recent decisions affecting current work:
 - [Phase 03-customer-ordering]: useCart initialises items as [] then loads from localStorage in useEffect with hydrated guard — SSR-safe, no hydration mismatch
 - [Phase 03-customer-ordering]: img tag used instead of Next.js Image for menu item thumbnails — external CDN URLs require remotePatterns config, avoided for v1 simplicity
 - [Phase 03-customer-ordering]: PublicVenue/PublicCategory/PublicMenuItem types exported from Server Component page.tsx — single source of truth shared by all ordering Client Components
+- [Phase 03-customer-ordering]: loadStripe() called at module level in stripe-payment-form.tsx — never inside a component — prevents Stripe re-initialization on render (Pitfall 4)
+- [Phase 03-customer-ordering]: Order created in PENDING_PAYMENT before PaymentIntent (INFR-02): handleCreateOrder() first, then POST payment-intent; clientSecret state gates Stripe Elements render
+- [Phase 03-customer-ordering]: BOTH paymentMode defaults to STRIPE paymentChoice — pay-now is the encouraged default, customer can choose PAC via radio
 
 ### Pending Todos
 
@@ -114,5 +118,5 @@ None yet.
 
 **Paused At:** None
 Last session: 2026-03-03
-**Stopped At:** Completed 03-customer-ordering/03-02-PLAN.md
+**Stopped At:** Completed 03-customer-ordering/03-03-PLAN.md
 Resume file: None
