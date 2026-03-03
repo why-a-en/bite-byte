@@ -5,19 +5,19 @@
 See: .planning/PROJECT.md (updated 2026-03-02)
 
 **Core value:** Customers can go from scanning a QR code to having their order in the kitchen in under 60 seconds, with zero friction and zero staff interaction.
-**Current focus:** Phase 2 — Auth and Venue Setup
+**Current focus:** Phase 3 — Customer Ordering
 
 ## Current Position
 
-**Current Phase:** 2
-**Current Phase Name:** Auth and Venue Setup
+**Current Phase:** 3
+**Current Phase Name:** Customer Ordering
 **Total Phases:** 4
-**Current Plan:** Not started
-**Total Plans in Phase:** 5
-**Status:** Milestone complete
-**Last Activity:** 2026-03-02
-**Last Activity Description:** Phase 2 complete
-**Progress:** [██████████] 100%
+**Current Plan:** 1
+**Total Plans in Phase:** 4
+**Status:** In progress
+**Last Activity:** 2026-03-03
+**Last Activity Description:** Phase 3 Plan 01 complete — NestJS ordering API
+**Progress:** [██████████░░░░░░░░░░] 50%
 
 ## Performance Metrics
 
@@ -46,6 +46,7 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 | Phase 02-auth-and-venue-setup P03 | 6min | 2 tasks | 16 files |
 | Phase 02-auth-and-venue-setup P04 | 7min | 2 tasks | 18 files |
 | Phase 02-auth-and-venue-setup P05 | 5min | 2 tasks | 8 files |
+| Phase 03-customer-ordering P01 | 8min | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -91,6 +92,9 @@ Recent decisions affecting current work:
 - [Phase 02-05]: @dnd-kit/modifiers not installed — restrictToVerticalAxis removed; vertical constraint not required for correctness
 - [Phase 02-05]: Photo upload silently skipped without BLOB_READ_WRITE_TOKEN — imageUrl stays null in dev, no crash or error
 - [Phase 02-05]: Optimistic availability toggle with rollback — fast one-click UX, rollback on API failure
+- [Phase 03-customer-ordering]: nanoid customAlphabet for 8-char uppercase alphanumeric referenceCode — human-readable for customers (ORDR-08)
+- [Phase 03-customer-ordering]: Public controllers omit @UseGuards entirely (simpler than @Public() decorator since JwtAuthGuard is per-controller not global)
+- [Phase 03-customer-ordering]: PAY_AT_COUNTER orders created in RECEIVED directly; STRIPE orders in PENDING_PAYMENT, transition to RECEIVED only via payment_intent.succeeded webhook (INFR-02)
 
 ### Pending Todos
 
@@ -106,5 +110,5 @@ None yet.
 
 **Paused At:** None
 Last session: 2026-03-03
-**Stopped At:** Phase 3 context gathered
+**Stopped At:** Completed 03-customer-ordering/03-01-PLAN.md
 Resume file: None

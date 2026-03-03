@@ -31,14 +31,14 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Customer Ordering
 
-- [ ] **ORDR-01**: Customer can scan a venue's QR code and see that venue's menu on their phone browser
-- [ ] **ORDR-02**: Customer can browse menu items organized by category with photos and descriptions
+- [x] **ORDR-01**: Customer can scan a venue's QR code and see that venue's menu on their phone browser
+- [x] **ORDR-02**: Customer can browse menu items organized by category with photos and descriptions
 - [ ] **ORDR-03**: Customer can add items to a cart and adjust quantities
 - [ ] **ORDR-04**: Customer's cart persists across page refresh (localStorage)
-- [ ] **ORDR-05**: Customer can place an order as a guest (no account required)
-- [ ] **ORDR-06**: Customer can pay online via Stripe (card, Apple Pay, Google Pay) when venue requires prepay
-- [ ] **ORDR-07**: Customer sees "pay at counter" instructions when venue allows deferred payment
-- [ ] **ORDR-08**: Customer receives an order confirmation with a reference number after placing an order
+- [x] **ORDR-05**: Customer can place an order as a guest (no account required)
+- [x] **ORDR-06**: Customer can pay online via Stripe (card, Apple Pay, Google Pay) when venue requires prepay
+- [x] **ORDR-07**: Customer sees "pay at counter" instructions when venue allows deferred payment
+- [x] **ORDR-08**: Customer receives an order confirmation with a reference number after placing an order
 - [ ] **ORDR-09**: Customer can view real-time order status (Pending → Preparing → Ready) via WebSocket
 - [ ] **ORDR-10**: Customer can return to their order status page after closing the browser (order ID persisted in localStorage)
 
@@ -122,14 +122,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MENU-04 | Phase 2 | Complete |
 | MENU-05 | Phase 2 | Complete |
 | MENU-06 | Phase 2 | Complete |
-| ORDR-01 | Phase 3 | Pending |
-| ORDR-02 | Phase 3 | Pending |
+| ORDR-01 | Phase 3 | Complete |
+| ORDR-02 | Phase 3 | Complete |
 | ORDR-03 | Phase 3 | Pending |
 | ORDR-04 | Phase 3 | Pending |
-| ORDR-05 | Phase 3 | Pending |
-| ORDR-06 | Phase 3 | Pending |
-| ORDR-07 | Phase 3 | Pending |
-| ORDR-08 | Phase 3 | Pending |
+| ORDR-05 | Phase 3 | Complete |
+| ORDR-06 | Phase 3 | Complete |
+| ORDR-07 | Phase 3 | Complete |
+| ORDR-08 | Phase 3 | Complete |
 | ORDR-09 | Phase 3 | Pending |
 | ORDR-10 | Phase 3 | Pending |
 | MGMT-01 | Phase 4 | Pending |
