@@ -33,8 +33,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **ORDR-01**: Customer can scan a venue's QR code and see that venue's menu on their phone browser
 - [x] **ORDR-02**: Customer can browse menu items organized by category with photos and descriptions
-- [ ] **ORDR-03**: Customer can add items to a cart and adjust quantities
-- [ ] **ORDR-04**: Customer's cart persists across page refresh (localStorage)
+- [x] **ORDR-03**: Customer can add items to a cart and adjust quantities
+- [x] **ORDR-04**: Customer's cart persists across page refresh (localStorage)
 - [x] **ORDR-05**: Customer can place an order as a guest (no account required)
 - [x] **ORDR-06**: Customer can pay online via Stripe (card, Apple Pay, Google Pay) when venue requires prepay
 - [x] **ORDR-07**: Customer sees "pay at counter" instructions when venue allows deferred payment
@@ -124,8 +124,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MENU-06 | Phase 2 | Complete |
 | ORDR-01 | Phase 3 | Complete |
 | ORDR-02 | Phase 3 | Complete |
-| ORDR-03 | Phase 3 | Pending |
-| ORDR-04 | Phase 3 | Pending |
+| ORDR-03 | Phase 3 | Complete |
+| ORDR-04 | Phase 3 | Complete |
 | ORDR-05 | Phase 3 | Complete |
 | ORDR-06 | Phase 3 | Complete |
 | ORDR-07 | Phase 3 | Complete |
