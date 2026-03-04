@@ -39,8 +39,8 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **ORDR-06**: Customer can pay online via Stripe (card, Apple Pay, Google Pay) when venue requires prepay
 - [x] **ORDR-07**: Customer sees "pay at counter" instructions when venue allows deferred payment
 - [x] **ORDR-08**: Customer receives an order confirmation with a reference number after placing an order
-- [ ] **ORDR-09**: Customer can view real-time order status (Pending → Preparing → Ready) via WebSocket
-- [ ] **ORDR-10**: Customer can return to their order status page after closing the browser (order ID persisted in localStorage)
+- [x] **ORDR-09**: Customer can view real-time order status (Pending → Preparing → Ready) via WebSocket
+- [x] **ORDR-10**: Customer can return to their order status page after closing the browser (order ID persisted in localStorage)
 
 ### Order Management
 
@@ -48,13 +48,13 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **MGMT-02**: Venue owner hears an audio alert when a new order arrives
 - [ ] **MGMT-03**: Venue owner can update order status (Received → Preparing → Ready → Completed)
 - [ ] **MGMT-04**: Order status changes push to the customer's status page in real-time
-- [ ] **MGMT-05**: Venue owner can view order history with date filtering
+- [x] **MGMT-05**: Venue owner can view order history with date filtering
 
 ### Analytics
 
-- [ ] **ANLY-01**: Venue owner can view revenue summary (today, this week, this month)
-- [ ] **ANLY-02**: Venue owner can view top-selling items
-- [ ] **ANLY-03**: Venue owner can view order volume over time (chart)
+- [x] **ANLY-01**: Venue owner can view revenue summary (today, this week, this month)
+- [x] **ANLY-02**: Venue owner can view top-selling items
+- [x] **ANLY-03**: Venue owner can view order volume over time (chart)
 
 ### Infrastructure
 
@@ -130,16 +130,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ORDR-06 | Phase 3 | Complete |
 | ORDR-07 | Phase 3 | Complete |
 | ORDR-08 | Phase 3 | Complete |
-| ORDR-09 | Phase 3 | Pending |
-| ORDR-10 | Phase 3 | Pending |
+| ORDR-09 | Phase 3 | Complete |
+| ORDR-10 | Phase 3 | Complete |
 | MGMT-01 | Phase 4 | Pending |
 | MGMT-02 | Phase 4 | Pending |
 | MGMT-03 | Phase 4 | Pending |
 | MGMT-04 | Phase 4 | Pending |
-| MGMT-05 | Phase 4 | Pending |
-| ANLY-01 | Phase 4 | Pending |
-| ANLY-02 | Phase 4 | Pending |
-| ANLY-03 | Phase 4 | Pending |
+| MGMT-05 | Phase 4 | Complete |
+| ANLY-01 | Phase 4 | Complete |
+| ANLY-02 | Phase 4 | Complete |
+| ANLY-03 | Phase 4 | Complete |
 | INFR-01 | Phase 1 | Complete |
 | INFR-02 | Phase 1 | Complete |
 | INFR-03 | Phase 1 | Complete |
