@@ -1,3 +1,5 @@
+'use server';
+
 import { fetchApi } from '@/lib/api';
 
 export interface OrderItem {
