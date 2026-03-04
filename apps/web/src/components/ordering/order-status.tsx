@@ -1,6 +1,8 @@
 'use client';
+import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { usePolling } from '@/lib/use-polling';
+import { socket } from '@/lib/socket';
 import type { PublicOrder } from '@/app/(menu)/menu/[slug]/order/[orderId]/page';
 
 const STEPS = [
@@ -19,16 +21,86 @@ const STATUS_INDEX: Record<PublicOrder['status'], number> = {
   CANCELLED: -2, // Show error state
 };
 
+const TERMINAL_STATES: Array<PublicOrder['status']> = ['READY', 'COMPLETED', 'CANCELLED'];
+
+interface OrderUpdatedPayload {
+  id: string;
+  status: PublicOrder['status'];
+}
+
 interface Props {
   order: PublicOrder;
   venueSlug: string;
 }
 
 export function OrderStatus({ order, venueSlug }: Props) {
-  const isTerminal = ['READY', 'COMPLETED', 'CANCELLED'].includes(order.status);
-  usePolling(5000, !isTerminal);
+  const router = useRouter();
+  const [status, setStatus] = useState<PublicOrder['status']>(order.status);
+  const pollingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const currentIndex = STATUS_INDEX[order.status];
+  // Keep status in sync if the server component re-renders with fresher data
+  useEffect(() => {
+    setStatus(order.status);
+  }, [order.status]);
+
+  useEffect(() => {
+    const orderId = order.id;
+
+    // If already in a terminal state on mount, no WebSocket needed
+    if (TERMINAL_STATES.includes(order.status)) {
+      return;
+    }
+
+    // Anonymous connection — customers have no JWT
+    socket.auth = {};
+    socket.connect();
+
+    function onConnect() {
+      socket.emit('join:order', orderId);
+    }
+
+    function onOrderUpdated(update: OrderUpdatedPayload) {
+      if (update.id !== orderId) return;
+      setStatus(update.status);
+      // Refresh server component data so the full order object stays in sync
+      router.refresh();
+      // Disconnect on terminal state — no further updates expected
+      if (TERMINAL_STATES.includes(update.status)) {
+        socket.off('connect', onConnect);
+        socket.off('order:updated', onOrderUpdated);
+        socket.off('connect_error', onConnectError);
+        socket.disconnect();
+      }
+    }
+
+    function onConnectError() {
+      // socket.active becomes false after reconnectionAttempts (3) are exhausted
+      if (!socket.active) {
+        // Silent fallback: poll every 5 seconds via router.refresh()
+        if (!pollingIntervalRef.current) {
+          pollingIntervalRef.current = setInterval(() => router.refresh(), 5000);
+        }
+      }
+    }
+
+    socket.on('connect', onConnect);
+    socket.on('order:updated', onOrderUpdated);
+    socket.on('connect_error', onConnectError);
+
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('order:updated', onOrderUpdated);
+      socket.off('connect_error', onConnectError);
+      socket.disconnect();
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+        pollingIntervalRef.current = null;
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order.id]);
+
+  const currentIndex = STATUS_INDEX[status];
 
   return (
     <div className="space-y-6">
@@ -40,7 +112,7 @@ export function OrderStatus({ order, venueSlug }: Props) {
       </div>
 
       {/* Status section */}
-      {order.status === 'PENDING_PAYMENT' && (
+      {status === 'PENDING_PAYMENT' && (
         <div className="flex items-center gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-4">
           <div className="h-5 w-5 animate-spin rounded-full border-2 border-amber-400 border-t-transparent flex-shrink-0" />
           <div>
@@ -50,7 +122,7 @@ export function OrderStatus({ order, venueSlug }: Props) {
         </div>
       )}
 
-      {order.status === 'CANCELLED' && (
+      {status === 'CANCELLED' && (
         <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-4">
           <p className="font-medium text-red-800">Your order has been cancelled</p>
           <p className="text-sm text-red-600 mt-0.5">
@@ -59,7 +131,7 @@ export function OrderStatus({ order, venueSlug }: Props) {
         </div>
       )}
 
-      {order.status !== 'PENDING_PAYMENT' && order.status !== 'CANCELLED' && (
+      {status !== 'PENDING_PAYMENT' && status !== 'CANCELLED' && (
         <div className="space-y-0">
           {STEPS.map((step, index) => {
             const isComplete = currentIndex > index;
