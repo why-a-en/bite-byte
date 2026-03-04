@@ -31,6 +31,7 @@ const COLUMN_HEADER_COLORS: Record<string, string> = {
 export function OrdersBoard({ venueId, initialOrders, token }: OrdersBoardProps) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [connected, setConnected] = useState(false);
+  const hasConnectedOnce = useRef(false);
   const [isMuted, setIsMuted] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
     return localStorage.getItem(`muted:${venueId}`) === 'true';
@@ -80,6 +81,7 @@ export function OrdersBoard({ venueId, initialOrders, token }: OrdersBoardProps)
   useEffect(() => {
     // Handlers — defined as named functions so we can remove them with socket.off(event, handler)
     const handleConnect = async () => {
+      hasConnectedOnce.current = true;
       setConnected(true);
       socket.emit('join:venue', venueId);
       // Re-fetch active orders on connect AND reconnect before resuming WS feed
@@ -202,7 +204,7 @@ export function OrdersBoard({ venueId, initialOrders, token }: OrdersBoardProps)
 
   return (
     <div className="flex flex-col h-full">
-      <ConnectionBanner connected={connected} />
+      {hasConnectedOnce.current && <ConnectionBanner connected={connected} />}
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b">
