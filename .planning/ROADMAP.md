@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Monorepo scaffolding, database schema, and multi-tenant infrastructure (completed 2026-03-02)
 - [x] **Phase 2: Auth and Venue Setup** - Venue owner accounts, venue configuration, and full menu management (completed 2026-03-02)
-- [ ] **Phase 3: Customer Ordering** - Public menu browsing, cart, guest checkout, Stripe payment, and order tracking
+- [x] **Phase 3: Customer Ordering** - Public menu browsing, cart, guest checkout, Stripe payment, and order tracking (completed 2026-03-04)
 - [ ] **Phase 4: Real-Time Operations and Analytics** - WebSocket gateway, live venue dashboard, order management, and sales analytics
 
 ## Phase Details
@@ -32,10 +32,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 4 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Turborepo monorepo scaffold: root config, shared tsconfig, shared types package, Next.js + NestJS app skeletons, Docker Compose
-- [ ] 01-02-PLAN.md — Prisma schema + initial migration: complete entity schema with JSONB hooks and price snapshot columns, Docker PostgreSQL migration
-- [ ] 01-03-PLAN.md — Multi-tenant isolation: PrismaModule, ClsModule, Prisma $extends tenant extension, TenantMiddleware, PostgreSQL RLS policies
-- [ ] 01-04-PLAN.md — Stripe webhook stub + tenant isolation test: idempotency-guarded webhook handler, Vitest setup, cross-tenant isolation integration test
+- [x] 01-01-PLAN.md — Turborepo monorepo scaffold: root config, shared tsconfig, shared types package, Next.js + NestJS app skeletons, Docker Compose
+- [x] 01-02-PLAN.md — Prisma schema + initial migration: complete entity schema with JSONB hooks and price snapshot columns, Docker PostgreSQL migration
+- [x] 01-03-PLAN.md — Multi-tenant isolation: PrismaModule, ClsModule, Prisma $extends tenant extension, TenantMiddleware, PostgreSQL RLS policies
+- [x] 01-04-PLAN.md — Stripe webhook stub + tenant isolation test: idempotency-guarded webhook handler, Vitest setup, cross-tenant isolation integration test
 
 ### Phase 2: Auth and Venue Setup
 **Goal**: A venue owner can create an account, log in, configure one or more venues with payment preferences, and build a complete menu with photos
@@ -50,11 +50,11 @@ Plans:
 **Plans**: 5 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — User model migration + NestJS AuthModule (register, login, JWT strategies, guards)
-- [ ] 02-02-PLAN.md — Venue/Category/Item CRUD API modules with owner-scoped queries and JwtAuthGuard
-- [ ] 02-03-PLAN.md — shadcn/ui + Tailwind v4 init, Next.js auth middleware, login/register pages with server actions
-- [ ] 02-04-PLAN.md — Dashboard layout with sidebar, venue management UI, Vercel Blob logo upload, QR code generation
-- [ ] 02-05-PLAN.md — Menu builder UI with drag-and-drop category reorder, item CRUD with photo upload, availability toggle
+- [x] 02-01-PLAN.md — User model migration + NestJS AuthModule (register, login, JWT strategies, guards)
+- [x] 02-02-PLAN.md — Venue/Category/Item CRUD API modules with owner-scoped queries and JwtAuthGuard
+- [x] 02-03-PLAN.md — shadcn/ui + Tailwind v4 init, Next.js auth middleware, login/register pages with server actions
+- [x] 02-04-PLAN.md — Dashboard layout with sidebar, venue management UI, Vercel Blob logo upload, QR code generation
+- [x] 02-05-PLAN.md — Menu builder UI with drag-and-drop category reorder, item CRUD with photo upload, availability toggle
 
 ### Phase 3: Customer Ordering
 **Goal**: A customer can scan a QR code, browse the menu, build a cart, place an order (paying online or at counter depending on the venue), and track their order status in real-time
@@ -69,11 +69,11 @@ Plans:
 **Plans**: 5 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — NestJS API layer: Prisma migration (customerName), PublicMenuModule, OrdersModule, complete Stripe webhook
-- [ ] 03-02-PLAN.md — Menu page + cart: (menu) route group, item rows, bottom sheet, cart hook, floating button, cart drawer
-- [ ] 03-03-PLAN.md — Checkout + Stripe: checkout page, CheckoutForm, StripePaymentForm, order creation sequence
-- [ ] 03-04-PLAN.md — Order status page: usePolling hook, progress steps, localStorage recovery
-- [ ] 03-05-PLAN.md — Human verification checkpoint: end-to-end ordering flow for all ORDR requirements
+- [x] 03-01-PLAN.md — NestJS API layer: Prisma migration (customerName), PublicMenuModule, OrdersModule, complete Stripe webhook
+- [x] 03-02-PLAN.md — Menu page + cart: (menu) route group, item rows, bottom sheet, cart hook, floating button, cart drawer
+- [x] 03-03-PLAN.md — Checkout + Stripe: checkout page, CheckoutForm, StripePaymentForm, order creation sequence
+- [x] 03-04-PLAN.md — Order status page: usePolling hook, progress steps, localStorage recovery
+- [x] 03-05-PLAN.md — Human verification checkpoint: end-to-end ordering flow for all ORDR requirements
 
 ### Phase 4: Real-Time Operations and Analytics
 **Goal**: Venue owner has a live dashboard where incoming orders appear instantly with an audio alert, can update order status that propagates to the customer in real-time, can review order history, and can view basic sales analytics
@@ -81,19 +81,27 @@ Plans:
 **Requirements**: MGMT-01, MGMT-02, MGMT-03, MGMT-04, MGMT-05, ANLY-01, ANLY-02, ANLY-03
 **Success Criteria** (what must be TRUE):
   1. When a customer places an order, it appears on the venue's live dashboard within 1 second and triggers an audio alert — with no manual refresh required
-  2. When the venue owner transitions an order through RECEIVED → PREPARING → READY → COMPLETED, the customer's order status page updates in real-time via WebSocket push
+  2. When the venue owner transitions an order through RECEIVED -> PREPARING -> READY -> COMPLETED, the customer's order status page updates in real-time via WebSocket push
   3. If the venue dashboard loses its WebSocket connection and reconnects, it re-fetches current order state via REST before resuming the live feed — no orders are missed or displayed stale
   4. Venue owner can filter order history by date and see past orders with their items and status
   5. Venue owner can view revenue totals (today, this week, this month), top-selling items by order count, and an order volume chart — all based on completed orders for their venue only
+**Plans**: 5 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — NestJS WebSocket Gateway + authenticated order management endpoints (status update, active orders)
+- [ ] 04-02-PLAN.md — NestJS Analytics + History API (revenue, top items, daily volume, paginated order history)
+- [ ] 04-03-PLAN.md — Live orders kanban dashboard with WebSocket, audio alerts, connection resilience, sidebar nav
+- [ ] 04-04-PLAN.md — Analytics dashboard + order history UI (revenue cards, bar chart, top items, history table)
+- [ ] 04-05-PLAN.md — Customer order status WebSocket upgrade + full Phase 4 human verification checkpoint
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete    | 2026-03-02 |
 | 2. Auth and Venue Setup | 5/5 | Complete    | 2026-03-02 |
-| 3. Customer Ordering | 1/5 | In Progress|  |
-| 4. Real-Time Operations and Analytics | 0/? | Not started | - |
+| 3. Customer Ordering | 5/5 | Complete    | 2026-03-04 |
+| 4. Real-Time Operations and Analytics | 0/5 | Not started | - |
