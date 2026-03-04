@@ -7,6 +7,7 @@ import {
 import { customAlphabet } from 'nanoid';
 import Stripe from 'stripe';
 import { PrismaService } from '../prisma/prisma.service';
+import { OrdersGateway } from './orders.gateway';
 
 const generateRef = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 8);
 
@@ -16,19 +17,43 @@ export interface CreateOrderDto {
   items: Array<{ menuItemId: string; quantity: number }>;
 }
 
+// Forward-only status transition map
+// RECEIVED → PREPARING → READY → COMPLETED
+// RECEIVED or PREPARING → CANCELLED
+const VALID_TRANSITIONS: Record<string, string[]> = {
+  RECEIVED: ['PREPARING', 'CANCELLED'],
+  PREPARING: ['READY', 'CANCELLED'],
+  READY: ['COMPLETED'],
+  COMPLETED: [],
+  CANCELLED: [],
+  PENDING_PAYMENT: [],
+};
+
 @Injectable()
 export class OrdersService {
   private readonly logger = new Logger(OrdersService.name);
-  private readonly stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '');
+  private _stripe: Stripe | undefined;
 
-  constructor(private readonly prisma: PrismaService) {}
+  private get stripe(): Stripe {
+    if (!this._stripe) {
+      const key = process.env.STRIPE_SECRET_KEY;
+      if (!key) throw new Error('STRIPE_SECRET_KEY is not configured');
+      this._stripe = new Stripe(key);
+    }
+    return this._stripe;
+  }
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly gateway: OrdersGateway,
+  ) {}
 
   /**
    * Create an order for the given venue slug.
    * - Validates venue exists
    * - Validates all menu items exist in this venue and fetches current prices for snapshot
    * - Calculates totalAmount from current prices * quantities (INFR-03)
-   * - PAY_AT_COUNTER: creates order in RECEIVED status immediately
+   * - PAY_AT_COUNTER: creates order in RECEIVED status immediately; emits order:new to venue room
    * - STRIPE: creates order in PENDING_PAYMENT status (transitions via webhook)
    */
   async create(slug: string, dto: CreateOrderDto) {
@@ -99,12 +124,34 @@ export class OrdersService {
         referenceCode: true,
         status: true,
         totalAmount: true,
+        customerName: true,
+        createdAt: true,
+        items: {
+          select: {
+            itemNameAtOrder: true,
+            unitPriceAtOrder: true,
+            quantity: true,
+          },
+        },
       },
     });
 
     this.logger.log(
       `Order ${order.referenceCode} created for venue ${slug} — status: ${status}`,
     );
+
+    // PAY_AT_COUNTER orders are immediately RECEIVED — emit order:new to venue dashboard
+    if (status === 'RECEIVED') {
+      this.gateway.emitNewOrder(venue.id, {
+        id: order.id,
+        referenceCode: order.referenceCode,
+        status: order.status,
+        customerName: order.customerName,
+        totalAmount: order.totalAmount,
+        createdAt: order.createdAt,
+        items: order.items,
+      });
+    }
 
     return {
       id: order.id,
@@ -160,12 +207,47 @@ export class OrdersService {
    * Transition an order to RECEIVED status.
    * Called ONLY by the Stripe webhook handler (payment_intent.succeeded).
    * This is the SOLE trigger for RECEIVED status (INFR-02).
+   * Emits order:new to the venue room after transition.
    */
   async markOrderReceived(orderId: string, paymentIntentId: string) {
     await this.prisma.order.update({
       where: { id: orderId },
       data: { status: 'RECEIVED' },
     });
+
+    // Fetch full order details for the emission payload (dashboard card data)
+    const fullOrder = await this.prisma.order.findUnique({
+      where: { id: orderId },
+      select: {
+        id: true,
+        referenceCode: true,
+        status: true,
+        customerName: true,
+        totalAmount: true,
+        createdAt: true,
+        venueId: true,
+        items: {
+          select: {
+            itemNameAtOrder: true,
+            unitPriceAtOrder: true,
+            quantity: true,
+          },
+        },
+      },
+    });
+
+    if (fullOrder) {
+      this.gateway.emitNewOrder(fullOrder.venueId, {
+        id: fullOrder.id,
+        referenceCode: fullOrder.referenceCode,
+        status: fullOrder.status,
+        customerName: fullOrder.customerName,
+        totalAmount: fullOrder.totalAmount,
+        createdAt: fullOrder.createdAt,
+        items: fullOrder.items,
+      });
+    }
+
     this.logger.log(
       `Order ${orderId} marked RECEIVED via payment_intent ${paymentIntentId}`,
     );
@@ -180,6 +262,93 @@ export class OrdersService {
       data: { status: 'CANCELLED' },
     });
     this.logger.log(`Order ${orderId} CANCELLED — reason: ${reason}`);
+  }
+
+  /**
+   * Update order status for a specific venue.
+   * Validates:
+   *  - Order belongs to the venue
+   *  - Status transition is forward-only: RECEIVED->PREPARING->READY->COMPLETED
+   *    CANCELLED is allowed from RECEIVED or PREPARING only
+   * Emits order:updated to both venue and order rooms via gateway.
+   */
+  async updateStatus(
+    venueId: string,
+    orderId: string,
+    newStatus: 'PREPARING' | 'READY' | 'COMPLETED' | 'CANCELLED',
+  ) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId, venueId },
+      select: { id: true, status: true },
+    });
+
+    if (!order) {
+      throw new NotFoundException(
+        `Order ${orderId} not found in venue ${venueId}`,
+      );
+    }
+
+    const validNext = VALID_TRANSITIONS[order.status] ?? [];
+    if (!validNext.includes(newStatus)) {
+      throw new BadRequestException(
+        `Invalid status transition: ${order.status} → ${newStatus}. ` +
+          `Valid transitions from ${order.status}: [${validNext.join(', ') || 'none'}]`,
+      );
+    }
+
+    const updatedOrder = await this.prisma.order.update({
+      where: { id: orderId },
+      data: { status: newStatus },
+      select: {
+        id: true,
+        referenceCode: true,
+        status: true,
+        customerName: true,
+        totalAmount: true,
+        createdAt: true,
+        _count: {
+          select: { items: true },
+        },
+      },
+    });
+
+    this.gateway.emitOrderUpdated(venueId, orderId, updatedOrder);
+
+    this.logger.log(
+      `Order ${orderId} status updated: ${order.status} → ${newStatus}`,
+    );
+
+    return updatedOrder;
+  }
+
+  /**
+   * Find all active (non-completed) orders for a venue.
+   * Returns orders in RECEIVED, PREPARING, or READY status ordered by creation time (oldest first).
+   * Used for the initial dashboard load and reconnect sync.
+   */
+  async findActiveOrders(venueId: string) {
+    return this.prisma.order.findMany({
+      where: {
+        venueId,
+        status: { in: ['RECEIVED', 'PREPARING', 'READY'] },
+      },
+      select: {
+        id: true,
+        referenceCode: true,
+        status: true,
+        customerName: true,
+        totalAmount: true,
+        createdAt: true,
+        items: {
+          select: {
+            itemNameAtOrder: true,
+            unitPriceAtOrder: true,
+            quantity: true,
+          },
+        },
+      },
+      orderBy: { createdAt: 'asc' },
+    });
   }
 
   /**
