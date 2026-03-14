@@ -1,7 +1,9 @@
 // Unauthenticated fetch helper for customer-facing public API endpoints.
 // Does NOT read cookies or forward auth headers — any customer can call these.
 export async function fetchPublicApi(path: string, options: RequestInit = {}) {
-  const res = await fetch(`${process.env.API_URL}${path}`, {
+  // NEXT_PUBLIC_API_URL is available in the browser; API_URL is server-only
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? process.env.API_URL;
+  const res = await fetch(`${baseUrl}${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',

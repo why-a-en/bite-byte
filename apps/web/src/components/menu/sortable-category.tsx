@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useActionState, useTransition } from 'react';
+import { useState, useActionState, useEffect, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import {
@@ -65,12 +66,18 @@ export function SortableCategory({
     transition,
   };
 
+  const router = useRouter();
   const [expanded, setExpanded] = useState(true);
   const [editingName, setEditingName] = useState(false);
   const [editNameValue, setEditNameValue] = useState(category.name);
   const [addItemOpen, setAddItemOpen] = useState(false);
   const [items, setItems] = useState<MenuItem[]>(category.items);
   const [isPending, startTransition] = useTransition();
+
+  // Sync items when server re-renders with fresh data (after router.refresh())
+  useEffect(() => {
+    setItems(category.items);
+  }, [category.items]);
 
   const boundUpdateAction = updateCategoryAction.bind(null, venueId, category.id);
   const [updateState, updateAction, isUpdating] = useActionState(boundUpdateAction, initialState);
@@ -268,7 +275,10 @@ export function SortableCategory({
         venueId={venueId}
         categoryId={category.id}
         open={addItemOpen}
-        onClose={() => setAddItemOpen(false)}
+        onClose={(saved) => {
+          setAddItemOpen(false);
+          if (saved) router.refresh();
+        }}
       />
     </div>
   );

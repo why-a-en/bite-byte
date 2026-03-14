@@ -16,6 +16,7 @@ export type CategoryFormState = {
 };
 
 export type ItemFormState = {
+  success?: boolean;
   error?: string;
   fieldErrors?: {
     name?: string[];
@@ -101,7 +102,7 @@ export async function reorderCategoriesAction(
   try {
     await fetchApi(`/venues/${venueId}/categories/reorder`, {
       method: 'PATCH',
-      body: JSON.stringify({ items }),
+      body: JSON.stringify(items),
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Failed to reorder categories';
@@ -164,7 +165,7 @@ export async function createItemAction(
   }
 
   revalidatePath(`/venues/${venueId}/menu`);
-  return {};
+  return { success: true };
 }
 
 export async function updateItemAction(
@@ -219,7 +220,7 @@ export async function updateItemAction(
   }
 
   revalidatePath(`/venues/${venueId}/menu`);
-  return {};
+  return { success: true };
 }
 
 export async function deleteItemAction(

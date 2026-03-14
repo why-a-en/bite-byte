@@ -1,9 +1,6 @@
 'use client';
 
-import { useActionState, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,14 +16,6 @@ import {
 import { createItemAction, updateItemAction, type ItemFormState } from '@/actions/menu';
 import type { MenuItem } from './category-list';
 
-const itemSchema = z.object({
-  name: z.string().min(1, 'Item name is required'),
-  price: z.number({ invalid_type_error: 'Price is required' }).min(0.01, 'Price must be at least $0.01'),
-  description: z.string().optional(),
-});
-
-type ItemFormValues = z.infer<typeof itemSchema>;
-
 const MAX_FILE_SIZE_MB = 4;
 
 interface ItemFormProps {
@@ -34,7 +23,7 @@ interface ItemFormProps {
   categoryId: string;
   existingItem?: MenuItem;
   open: boolean;
-  onClose: () => void;
+  onClose: (saved?: boolean) => void;
 }
 
 const initialState: ItemFormState = {};
@@ -51,18 +40,17 @@ export function ItemForm({ venueId, categoryId, existingItem, open, onClose }: I
   const [fileSizeWarning, setFileSizeWarning] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ItemFormValues>({
-    resolver: zodResolver(itemSchema),
-    defaultValues: {
-      name: existingItem?.name ?? '',
-      price: existingItem?.price ?? undefined,
-      description: existingItem?.description ?? '',
-    },
-  });
+  // Keep a ref to onClose so the effect below doesn't re-run each time the
+  // parent re-renders and creates a new inline arrow function. Without this,
+  // router.refresh() → re-render → new onClose ref → effect fires → refresh loop.
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
+  useEffect(() => {
+    if (formState.success) {
+      onCloseRef.current(true);
+    }
+  }, [formState.success]);
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -92,11 +80,6 @@ export function ItemForm({ venueId, categoryId, existingItem, open, onClose }: I
     onClose();
   }
 
-  async function onSubmit(_values: ItemFormValues, formData: FormData) {
-    await formAction(formData);
-    onClose();
-  }
-
   return (
     <Dialog open={open} onOpenChange={(isOpen) => { if (!isOpen) handleClose(); }}>
       <DialogContent className="sm:max-w-[480px]">
@@ -104,33 +87,19 @@ export function ItemForm({ venueId, categoryId, existingItem, open, onClose }: I
           <DialogTitle>{isEdit ? 'Edit Item' : 'Add Item'}</DialogTitle>
         </DialogHeader>
 
-        <form
-          action={formAction}
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit(
-              (_values) => {
-                const formData = new FormData(e.currentTarget);
-                void onSubmit(_values, formData);
-              },
-              () => {
-                // validation errors — do not submit
-              },
-            )();
-          }}
-          className="space-y-4"
-        >
+        <form action={formAction} className="space-y-4">
           {/* Name */}
           <div className="space-y-1">
             <Label htmlFor="item-name">Name *</Label>
             <Input
               id="item-name"
-              {...register('name')}
               name="name"
+              defaultValue={existingItem?.name ?? ''}
               placeholder="e.g. Cheeseburger"
+              required
             />
-            {errors.name && (
-              <p className="text-destructive text-xs">{errors.name.message}</p>
+            {formState.fieldErrors?.name && (
+              <p className="text-destructive text-xs">{formState.fieldErrors.name[0]}</p>
             )}
           </div>
 
@@ -141,17 +110,18 @@ export function ItemForm({ venueId, categoryId, existingItem, open, onClose }: I
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
               <Input
                 id="item-price"
-                {...register('price', { valueAsNumber: true })}
                 name="price"
                 type="number"
                 step="0.01"
                 min="0.01"
+                defaultValue={existingItem?.price ?? ''}
                 placeholder="0.00"
                 className="pl-7"
+                required
               />
             </div>
-            {errors.price && (
-              <p className="text-destructive text-xs">{errors.price.message}</p>
+            {formState.fieldErrors?.price && (
+              <p className="text-destructive text-xs">{formState.fieldErrors.price[0]}</p>
             )}
           </div>
 
@@ -160,8 +130,8 @@ export function ItemForm({ venueId, categoryId, existingItem, open, onClose }: I
             <Label htmlFor="item-description">Description</Label>
             <Textarea
               id="item-description"
-              {...register('description')}
               name="description"
+              defaultValue={existingItem?.description ?? ''}
               placeholder="Optional description..."
               rows={3}
             />

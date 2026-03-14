@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -30,6 +31,7 @@ interface ItemCardProps {
 }
 
 export function ItemCard({ venueId, categoryId, item, onDeleted, onAvailabilityChanged }: ItemCardProps) {
+  const router = useRouter();
   const [editOpen, setEditOpen] = useState(false);
   const [isAvailable, setIsAvailable] = useState(item.isAvailable);
   const [isPending, startTransition] = useTransition();
@@ -170,7 +172,10 @@ export function ItemCard({ venueId, categoryId, item, onDeleted, onAvailabilityC
         categoryId={categoryId}
         existingItem={item}
         open={editOpen}
-        onClose={() => setEditOpen(false)}
+        onClose={(saved) => {
+          setEditOpen(false);
+          if (saved) router.refresh();
+        }}
       />
     </>
   );

@@ -1,6 +1,7 @@
 'use server';
 
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { put } from '@vercel/blob';
 import { z } from 'zod';
 import { fetchApi } from '@/lib/api';
@@ -23,6 +24,7 @@ const updateVenueSchema = z.object({
 });
 
 export type VenueFormState = {
+  success?: boolean;
   error?: string;
   fieldErrors?: {
     name?: string[];
@@ -59,6 +61,7 @@ export async function createVenueAction(
     return { error: message };
   }
 
+  revalidatePath('/dashboard', 'layout');
   redirect(`/venues/${venue.id}`);
 }
 
@@ -87,7 +90,9 @@ export async function updateVenueAction(
     return { error: message };
   }
 
-  return {};
+  revalidatePath(`/venues/${venueId}`);
+  revalidatePath('/dashboard');
+  return { success: true };
 }
 
 export async function deleteVenueAction(venueId: string): Promise<void> {

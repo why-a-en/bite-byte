@@ -7,6 +7,10 @@ async function bootstrap() {
   // rawBody: true is required for Stripe webhook signature verification (Phase 3)
   const app = await NestFactory.create(AppModule, { rawBody: true });
   app.setGlobalPrefix('api');
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN ?? 'http://localhost:3000',
+    credentials: true,
+  });
   const port = process.env['PORT'] ?? 3001;
   await app.listen(port);
   console.log(`API running on http://localhost:${port}/api`);

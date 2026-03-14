@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useActionState, useTransition } from 'react';
+import { useState, useActionState, useEffect, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   DndContext,
   closestCenter,
@@ -49,9 +50,15 @@ interface CategoryListProps {
 const initialState: CategoryFormState = {};
 
 export function CategoryList({ venueId, initialCategories }: CategoryListProps) {
+  const router = useRouter();
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [showAddForm, setShowAddForm] = useState(false);
   const [isPending, startTransition] = useTransition();
+
+  // Sync categories when server re-renders with fresh data (after router.refresh())
+  useEffect(() => {
+    setCategories(initialCategories);
+  }, [initialCategories]);
 
   const boundCreateAction = createCategoryAction.bind(null, venueId);
   const [formState, formAction, isFormPending] = useActionState(boundCreateAction, initialState);
@@ -103,6 +110,7 @@ export function CategoryList({ venueId, initialCategories }: CategoryListProps) 
   return (
     <div className="space-y-4">
       <DndContext
+        id="menu-category-dnd"
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
@@ -133,6 +141,7 @@ export function CategoryList({ venueId, initialCategories }: CategoryListProps) 
           action={async (formData) => {
             await formAction(formData);
             setShowAddForm(false);
+            router.refresh();
           }}
           className="border rounded-lg p-4 bg-card"
         >

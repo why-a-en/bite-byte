@@ -1,9 +1,7 @@
 'use client';
 
-import { useActionState, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { useActionState, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { QrCode, Upload, Trash2 } from 'lucide-react';
@@ -36,17 +34,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Separator } from '@/components/ui/separator';
 
-const updateSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  slug: z
-    .string()
-    .min(1, 'Slug is required')
-    .regex(/^[a-z0-9-]+$/, 'Only lowercase letters, numbers, and hyphens'),
-  paymentMode: z.enum(['PREPAY_REQUIRED', 'PAY_AT_COUNTER', 'BOTH']),
-});
-
-type FormValues = z.infer<typeof updateSchema>;
-
 interface VenueSettingsFormProps {
   venue: {
     id: string;
@@ -69,36 +56,22 @@ export function VenueSettingsForm({ venue }: VenueSettingsFormProps) {
     boundUpdateAction,
     {},
   );
-  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  const router = useRouter();
+  const [name, setName] = useState(venue.name);
+  const [paymentMode, setPaymentMode] = useState(venue.paymentMode);
+  const [slug, setSlug] = useState(venue.slug);
+
+  useEffect(() => {
+    if (state.success) {
+      router.refresh();
+    }
+  }, [state, router]);
 
   const [logoUrl, setLogoUrl] = useState<string | null>(venue.logoUrl);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    watch,
-  } = useForm<FormValues>({
-    resolver: zodResolver(updateSchema),
-    defaultValues: {
-      name: venue.name,
-      slug: venue.slug,
-      paymentMode: venue.paymentMode,
-    },
-  });
-
-  const watchedSlug = watch('slug');
-  const watchedPaymentMode = watch('paymentMode');
-
-  function onSubmit(_data: FormValues, event?: React.BaseSyntheticEvent) {
-    setSaveSuccess(false);
-    const form = event?.target as HTMLFormElement;
-    if (form) form.requestSubmit();
-  }
 
   async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -119,7 +92,6 @@ export function VenueSettingsForm({ venue }: VenueSettingsFormProps) {
     }
     setUploading(false);
 
-    // Reset file input
     if (fileInputRef.current) fileInputRef.current.value = '';
   }
 
@@ -128,39 +100,34 @@ export function VenueSettingsForm({ venue }: VenueSettingsFormProps) {
       {/* Venue details form */}
       <div>
         <h2 className="text-lg font-semibold mb-4">Venue Details</h2>
-        <form
-          action={formAction}
-          onSubmit={handleSubmit((data, e) => onSubmit(data, e))}
-          className="space-y-4 max-w-lg"
-        >
+        <form action={formAction} className="space-y-4 max-w-lg">
           {state.error && (
             <div className="rounded-md bg-destructive/10 border border-destructive/20 px-4 py-3">
               <p className="text-sm text-destructive">{state.error}</p>
             </div>
           )}
 
-          {saveSuccess && (
+          {state.success && (
             <div className="rounded-md bg-green-50 border border-green-200 px-4 py-3">
               <p className="text-sm text-green-700">Venue settings saved.</p>
             </div>
           )}
 
           {/* Hidden field for paymentMode since Select is client-controlled */}
-          <input type="hidden" name="paymentMode" value={watchedPaymentMode} />
+          <input type="hidden" name="paymentMode" value={paymentMode} />
 
           <div className="space-y-2">
             <Label htmlFor="name">Venue name</Label>
             <Input
               id="name"
-              {...register('name')}
               name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               disabled={isPending}
-              aria-invalid={!!errors.name || !!state.fieldErrors?.name}
+              aria-invalid={!!state.fieldErrors?.name}
             />
-            {(errors.name || state.fieldErrors?.name) && (
-              <p className="text-xs text-destructive">
-                {errors.name?.message ?? state.fieldErrors?.name?.[0]}
-              </p>
+            {state.fieldErrors?.name && (
+              <p className="text-xs text-destructive">{state.fieldErrors.name[0]}</p>
             )}
           </div>
 
@@ -168,20 +135,19 @@ export function VenueSettingsForm({ venue }: VenueSettingsFormProps) {
             <Label htmlFor="slug">URL slug</Label>
             <Input
               id="slug"
-              {...register('slug')}
               name="slug"
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
               disabled={isPending}
-              aria-invalid={!!errors.slug || !!state.fieldErrors?.slug}
+              aria-invalid={!!state.fieldErrors?.slug}
             />
-            {(errors.slug || state.fieldErrors?.slug) && (
-              <p className="text-xs text-destructive">
-                {errors.slug?.message ?? state.fieldErrors?.slug?.[0]}
-              </p>
+            {state.fieldErrors?.slug && (
+              <p className="text-xs text-destructive">{state.fieldErrors.slug[0]}</p>
             )}
             <p className="text-xs text-muted-foreground">
               Public menu URL:{' '}
               <code className="bg-muted px-1 rounded text-xs">
-                {process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'}/menu/{watchedSlug}
+                {process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'}/menu/{slug}
               </code>
             </p>
           </div>
@@ -189,10 +155,8 @@ export function VenueSettingsForm({ venue }: VenueSettingsFormProps) {
           <div className="space-y-2">
             <Label>Payment mode</Label>
             <Select
-              value={watchedPaymentMode}
-              onValueChange={(val) =>
-                setValue('paymentMode', val as 'PREPAY_REQUIRED' | 'PAY_AT_COUNTER' | 'BOTH')
-              }
+              value={paymentMode}
+              onValueChange={(val) => setPaymentMode(val as typeof paymentMode)}
               disabled={isPending}
             >
               <SelectTrigger className="w-full">
@@ -205,12 +169,11 @@ export function VenueSettingsForm({ venue }: VenueSettingsFormProps) {
               </SelectContent>
             </Select>
             <p className="text-xs text-muted-foreground">
-              {watchedPaymentMode === 'PREPAY_REQUIRED' &&
+              {paymentMode === 'PREPAY_REQUIRED' &&
                 'Customers must pay via the app before their order is placed.'}
-              {watchedPaymentMode === 'PAY_AT_COUNTER' &&
+              {paymentMode === 'PAY_AT_COUNTER' &&
                 'Customers place the order via app and pay at the counter.'}
-              {watchedPaymentMode === 'BOTH' &&
-                'Customers can choose to prepay or pay at the counter.'}
+              {paymentMode === 'BOTH' && 'Customers can choose to prepay or pay at the counter.'}
             </p>
           </div>
 
@@ -226,7 +189,6 @@ export function VenueSettingsForm({ venue }: VenueSettingsFormProps) {
       <div>
         <h2 className="text-lg font-semibold mb-4">Venue Logo</h2>
         <div className="space-y-4 max-w-sm">
-          {/* Logo preview */}
           <div className="w-24 h-24 rounded-xl border bg-muted flex items-center justify-center overflow-hidden">
             {logoUrl ? (
               <Image
@@ -267,9 +229,7 @@ export function VenueSettingsForm({ venue }: VenueSettingsFormProps) {
               <Upload className="h-4 w-4 mr-2" />
               {uploading ? 'Uploading...' : logoUrl ? 'Change logo' : 'Upload logo'}
             </Button>
-            <p className="text-xs text-muted-foreground mt-1">
-              PNG, JPG, or WebP. Max 5MB.
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">PNG, JPG, or WebP. Max 5MB.</p>
           </div>
         </div>
       </div>
