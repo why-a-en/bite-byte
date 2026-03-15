@@ -15,8 +15,8 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 **Current Plan:** 5/5 (all complete)
 **Total Plans in Phase:** 5
 **Status:** Phase complete — ready for verification
-**Last Activity:** 2026-03-04
-**Last Activity Description:** Phase 3 UAT complete — full customer ordering flow verified
+**Last Activity:** 2026-03-14
+**Last Activity Description:** Completed quick task 1: add proper landing page for the website
 **Progress:** [█████████░] 89%
 
 ## Performance Metrics
@@ -118,6 +118,12 @@ Recent decisions affecting current work:
 ### Pending Todos
 
 None yet.
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 1 | add proper landing page for the website | 2026-03-14 | e75a0ac | [1-add-proper-landing-page-for-the-website](./quick/1-add-proper-landing-page-for-the-website/) |
 
 ### Blockers/Concerns
 
