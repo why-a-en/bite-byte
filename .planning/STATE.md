@@ -15,8 +15,8 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 **Current Plan:** 5/5 (all complete)
 **Total Plans in Phase:** 5
 **Status:** Phase complete — ready for verification
-**Last Activity:** 2026-03-14
-**Last Activity Description:** Completed quick task 1: add proper landing page for the website
+**Last Activity:** 2026-03-15
+**Last Activity Description:** Completed quick task 2: enhance landing page with GSAP parallax animations
 **Progress:** [█████████░] 89%
 
 ## Performance Metrics
@@ -124,6 +124,7 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 1 | add proper landing page for the website | 2026-03-14 | e75a0ac | [1-add-proper-landing-page-for-the-website](./quick/1-add-proper-landing-page-for-the-website/) |
+| 2 | enhance landing page with GSAP parallax | 2026-03-15 | eec7552 | [2-enhance-landing-page-with-gsap-parallax-](./quick/2-enhance-landing-page-with-gsap-parallax-/) |
 
 ### Blockers/Concerns
 
@@ -134,6 +135,6 @@ None yet.
 ## Session Continuity
 
 **Paused At:** None
-Last session: 2026-03-03
-**Stopped At:** Completed 04-04-PLAN.md (Analytics Dashboard and Order History)
+Last session: 2026-03-15
+**Stopped At:** Completed quick task 2 (Enhance Landing Page with GSAP Parallax)
 Resume file: None
