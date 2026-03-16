@@ -7,7 +7,9 @@
       "Bash(docker compose exec postgres psql -U bitebyte -d bitebyte_dev -c \"SELECT pg_reload_conf\\(\\);\")",
       "Bash(PGPASSWORD=bitebyte_app psql -h localhost -p 5433 -U bitebyte_app -d bitebyte_dev -c \"SELECT 1;\")",
       "Bash(docker compose:*)",
-      "Bash(DATABASE_URL=\"postgresql://neondb_owner:npg_Zk8jUMP2KnpL@ep-orange-breeze-a1v9jkzf-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require\" node -e \":*)"
+      "Bash(DATABASE_URL=\"postgresql://neondb_owner:npg_Zk8jUMP2KnpL@ep-orange-breeze-a1v9jkzf-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require\" node -e \":*)",
+      "Skill(gsd:quick)",
+      "Skill(gsd:quick:*)"
     ]
   }
 }

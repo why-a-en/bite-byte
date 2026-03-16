@@ -19,9 +19,18 @@ export default function MagneticCursor() {
 
     setIsVisible(true);
 
+    // Hide native cursor globally
+    const style = document.createElement('style');
+    style.id = 'magnetic-cursor-hide';
+    style.textContent = '*, *::before, *::after { cursor: none !important; }';
+    document.head.appendChild(style);
+
+    const SIZE = 48;
+    const HALF = SIZE / 2;
+
     const handleMouseMove = (e: MouseEvent) => {
-      rawX.current = e.clientX - 20;
-      rawY.current = e.clientY - 20;
+      rawX.current = e.clientX - HALF;
+      rawY.current = e.clientY - HALF;
       x.set(rawX.current);
       y.set(rawY.current);
     };
@@ -47,6 +56,8 @@ export default function MagneticCursor() {
     window.addEventListener('mouseout', handleMouseOut);
 
     return () => {
+      const el = document.getElementById('magnetic-cursor-hide');
+      if (el) el.remove();
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseover', handleMouseOver);
       window.removeEventListener('mouseout', handleMouseOut);
@@ -56,27 +67,68 @@ export default function MagneticCursor() {
   if (!isVisible) return null;
 
   return (
-    <motion.div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: 40,
-        height: 40,
-        borderRadius: '50%',
-        pointerEvents: 'none',
-        zIndex: 9999,
-        x,
-        y,
-        border: isHoveringMagnetic ? '2px solid #f97316' : '2px solid #d1d5db',
-        background: 'transparent',
-        mixBlendMode: 'normal',
-        transition: 'border-color 0.2s ease',
-      }}
-      animate={{
-        scale: isHoveringMagnetic ? 1.5 : 1,
-      }}
-      transition={{ duration: 0.2 }}
-    />
+    <>
+      {/* Outer ring */}
+      <motion.div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: 48,
+          height: 48,
+          borderRadius: '50%',
+          pointerEvents: 'none',
+          zIndex: 9999,
+          x,
+          y,
+          border: isHoveringMagnetic
+            ? '2px solid rgba(249,115,22,1)'
+            : '2px solid rgba(255,255,255,0.7)',
+          background: isHoveringMagnetic
+            ? 'rgba(249,115,22,0.15)'
+            : 'transparent',
+          boxShadow: isHoveringMagnetic
+            ? '0 0 20px rgba(249,115,22,0.5), 0 0 60px rgba(249,115,22,0.2)'
+            : '0 0 10px rgba(255,255,255,0.1)',
+          mixBlendMode: 'difference',
+          transition: 'border-color 0.2s ease, background 0.2s ease, box-shadow 0.3s ease',
+        }}
+        animate={{
+          scale: isHoveringMagnetic ? 1.6 : 1,
+        }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
+      />
+      {/* Center dot */}
+      <motion.div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: 48,
+          height: 48,
+          pointerEvents: 'none',
+          zIndex: 10000,
+          x,
+          y,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <motion.div
+          animate={{
+            width: isHoveringMagnetic ? 0 : 6,
+            height: isHoveringMagnetic ? 0 : 6,
+            opacity: isHoveringMagnetic ? 0 : 1,
+          }}
+          transition={{ duration: 0.2 }}
+          style={{
+            borderRadius: '50%',
+            background: '#ffffff',
+            mixBlendMode: 'difference',
+          }}
+        />
+      </motion.div>
+    </>
   );
 }
