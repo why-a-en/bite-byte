@@ -35,8 +35,8 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 **Current Plan:** 5/5 (all complete)
 **Total Plans in Phase:** 5
 **Status:** Phase complete — ready for verification
-**Last Activity:** 2026-04-03
-**Last Activity Description:** Completed quick task 13: Polish customer ordering flow
+**Last Activity:** 2026-04-04
+**Last Activity Description:** Completed quick task 14: General reliability audit
 **Progress:** [█████████░] 89%
 
 ## Performance Metrics
@@ -157,6 +157,7 @@ None yet.
 | 11 | QR slab double-sided with realistic 3D materials | 2026-04-04 | 6df1ecd | [11-qr-slab-double-sided-with-qr-on-both-fac](./quick/11-qr-slab-double-sided-with-qr-on-both-fac/) |
 | 12 | Add drag-and-drop to live orders board | 2026-04-03 | adf7cc3 | [12-add-drag-and-drop-to-live-orders-board-f](./quick/12-add-drag-and-drop-to-live-orders-board-f/) |
 | 13 | Polish customer ordering flow | 2026-04-03 | 018ccb8 | [13-polish-customer-ordering-flow-menu-brows](./quick/13-polish-customer-ordering-flow-menu-brows/) |
+| 14 | General reliability audit - cleanup orphaned files and unused deps | 2026-04-04 | ac8b06c | [14-general-reliability-audit-fix-build-erro](./quick/14-general-reliability-audit-fix-build-erro/) |
 
 ### Blockers/Concerns
 
