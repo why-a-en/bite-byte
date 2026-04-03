@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/lib/cart';
 import { fetchPublicApi } from '@/lib/api-public';
+import { toast } from 'sonner';
 import { StripePaymentForm } from './stripe-payment-form';
 
 type PaymentChoice = 'STRIPE' | 'PAY_AT_COUNTER';
@@ -101,7 +102,9 @@ export function CheckoutForm({ venue }: Props) {
       clearCart();
       router.push(`/menu/${venue.slug}/order/${order.id}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to place order');
+      const message = err instanceof Error ? err.message : 'Failed to place order';
+      setError(message);
+      toast.error(message);
       setLoading(false);
     }
   }
@@ -135,7 +138,9 @@ export function CheckoutForm({ venue }: Props) {
       );
       setClientSecret(pi.clientSecret);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to initiate payment');
+      const message = err instanceof Error ? err.message : 'Failed to initiate payment';
+      setError(message);
+      toast.error(message);
       setLoading(false);
     }
     // Note: loading stays true until Stripe form renders — intentional

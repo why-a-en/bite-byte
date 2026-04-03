@@ -14,9 +14,11 @@ import {
   Check,
   X,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Spinner } from '@/components/ui/spinner';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -91,14 +93,26 @@ export function SortableCategory({
       if (!result.error && !result.fieldErrors) {
         onUpdated(category.id, editNameValue);
         setEditingName(false);
+        toast.success('Category renamed');
+      } else {
+        toast.error(result.error || 'Failed to rename category');
       }
     });
   }
 
   function handleDelete() {
     startTransition(async () => {
-      await deleteCategoryAction(venueId, category.id);
+      const result = await deleteCategoryAction(venueId, category.id);
+      if (result.error) {
+        if (result.error.includes('409') || result.error.toLowerCase().includes('items')) {
+          toast.error('Remove all items before deleting this category');
+        } else {
+          toast.error(result.error);
+        }
+        return;
+      }
       onDeleted(category.id);
+      toast.success('Category deleted');
     });
   }
 
@@ -225,8 +239,9 @@ export function SortableCategory({
                     <AlertDialogAction
                       onClick={handleDelete}
                       className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      disabled={isPending}
                     >
-                      Delete
+                      {isPending ? <><Spinner className="mr-1" /> Deleting...</> : 'Delete'}
                     </AlertDialogAction>
                   )}
                 </AlertDialogFooter>

@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
+import { toast } from 'sonner';
 import { createItemAction, updateItemAction, type ItemFormState } from '@/actions/menu';
 import type { MenuItem } from './category-list';
 
@@ -48,9 +49,12 @@ export function ItemForm({ venueId, categoryId, existingItem, open, onClose }: I
 
   useEffect(() => {
     if (formState.success) {
+      toast.success(isEdit ? 'Item updated' : 'Item created');
       onCloseRef.current(true);
+    } else if (formState.error) {
+      toast.error(formState.error);
     }
-  }, [formState.success]);
+  }, [formState.success, formState.error, isEdit]);
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];

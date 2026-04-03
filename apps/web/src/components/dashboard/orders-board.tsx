@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Volume2, VolumeX } from 'lucide-react';
+import { Volume2, VolumeX, ClipboardList } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { socket } from '@/lib/socket';
@@ -184,7 +185,10 @@ export function OrdersBoard({ venueId, initialOrders, token }: OrdersBoardProps)
 
       try {
         await updateOrderStatus(venueId, orderId, newStatus);
+        const statusLabel = COLUMNS.find((c) => c.status === newStatus)?.label ?? newStatus;
+        toast.success(`Order moved to ${statusLabel}`);
       } catch {
+        toast.error('Failed to update order status');
         // Revert optimistic update on failure
         try {
           const active = await fetchActiveOrders(venueId);
@@ -222,6 +226,15 @@ export function OrdersBoard({ venueId, initialOrders, token }: OrdersBoardProps)
 
       {/* Kanban board */}
       <div className="flex-1 overflow-auto p-4">
+        {visibleOrders.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <ClipboardList className="h-16 w-16 text-muted-foreground/50 mb-4" />
+            <h2 className="text-lg font-medium mb-2">No active orders</h2>
+            <p className="text-sm text-muted-foreground max-w-xs">
+              Orders will appear here in real-time when customers place them.
+            </p>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
           {COLUMNS.map(({ label, status }) => {
             const columnOrders = visibleOrders.filter((o) => o.status === status);
@@ -258,6 +271,7 @@ export function OrdersBoard({ venueId, initialOrders, token }: OrdersBoardProps)
             );
           })}
         </div>
+        )}
       </div>
     </div>
   );

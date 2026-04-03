@@ -11,7 +11,9 @@ import {
   uploadLogoAction,
   type VenueFormState,
 } from '@/actions/venues';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -64,7 +66,10 @@ export function VenueSettingsForm({ venue }: VenueSettingsFormProps) {
 
   useEffect(() => {
     if (state.success) {
+      toast.success('Venue settings saved');
       router.refresh();
+    } else if (state.error) {
+      toast.error(state.error);
     }
   }, [state, router]);
 
@@ -178,7 +183,7 @@ export function VenueSettingsForm({ venue }: VenueSettingsFormProps) {
           </div>
 
           <Button type="submit" disabled={isPending}>
-            {isPending ? 'Saving...' : 'Save changes'}
+            {isPending ? <><Spinner className="mr-1" /> Saving...</> : 'Save changes'}
           </Button>
         </form>
       </div>

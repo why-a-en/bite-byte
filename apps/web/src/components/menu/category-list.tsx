@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useActionState, useEffect, useTransition } from 'react';
+import { useState, useActionState, useEffect, useTransition, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   DndContext,
@@ -17,8 +17,10 @@ import {
   arrayMove,
 } from '@dnd-kit/sortable';
 import { Plus } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
 import { SortableCategory } from './sortable-category';
 import {
   createCategoryAction,
@@ -62,6 +64,20 @@ export function CategoryList({ venueId, initialCategories }: CategoryListProps) 
 
   const boundCreateAction = createCategoryAction.bind(null, venueId);
   const [formState, formAction, isFormPending] = useActionState(boundCreateAction, initialState);
+  const hasSubmittedRef = useRef(false);
+
+  // Toast on category create success/failure
+  useEffect(() => {
+    if (!hasSubmittedRef.current) return;
+    if (formState.error || formState.fieldErrors) {
+      toast.error(formState.error || 'Failed to create category');
+    } else {
+      toast.success('Category created');
+      setShowAddForm(false);
+      router.refresh();
+    }
+    hasSubmittedRef.current = false;
+  }, [formState, router]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -90,10 +106,13 @@ export function CategoryList({ venueId, initialCategories }: CategoryListProps) 
 
     // Persist to API
     startTransition(async () => {
-      await reorderCategoriesAction(
+      const result = await reorderCategoriesAction(
         venueId,
         reordered.map((cat) => ({ id: cat.id, sortOrder: cat.sortOrder })),
       );
+      if (result.error) {
+        toast.error('Failed to reorder categories');
+      }
     });
   }
 
@@ -138,10 +157,9 @@ export function CategoryList({ venueId, initialCategories }: CategoryListProps) 
       {/* Add Category */}
       {showAddForm ? (
         <form
-          action={async (formData) => {
-            await formAction(formData);
-            setShowAddForm(false);
-            router.refresh();
+          action={(formData) => {
+            hasSubmittedRef.current = true;
+            formAction(formData);
           }}
           className="border rounded-lg p-4 bg-card"
         >
@@ -155,7 +173,7 @@ export function CategoryList({ venueId, initialCategories }: CategoryListProps) 
               className="flex-1"
             />
             <Button type="submit" size="sm" disabled={isFormPending}>
-              {isFormPending ? 'Adding...' : 'Add'}
+              {isFormPending ? <><Spinner className="mr-1" /> Adding...</> : 'Add'}
             </Button>
             <Button
               type="button"

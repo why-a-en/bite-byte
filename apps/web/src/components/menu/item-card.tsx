@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Pencil, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
@@ -47,14 +48,22 @@ export function ItemCard({ venueId, categoryId, item, onDeleted, onAvailabilityC
         // Roll back on error
         setIsAvailable(!checked);
         onAvailabilityChanged(item.id, !checked);
+        toast.error('Failed to update availability');
+      } else {
+        toast.success(checked ? 'Item available' : 'Item unavailable');
       }
     });
   }
 
   function handleDelete() {
     startTransition(async () => {
-      await deleteItemAction(venueId, item.id);
+      const result = await deleteItemAction(venueId, item.id);
+      if (result.error) {
+        toast.error('Failed to delete item');
+        return;
+      }
       onDeleted(item.id);
+      toast.success('Item deleted');
     });
   }
 

@@ -2,7 +2,7 @@ import { fetchApi } from '@/lib/api';
 import { VenueCard, CreateVenueCard } from '@/components/dashboard/venue-card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Plus } from 'lucide-react';
+import { Plus, Store } from 'lucide-react';
 
 interface Venue {
   id: string;
@@ -43,13 +43,13 @@ export default async function DashboardPage() {
       </div>
 
       {venues.length === 0 ? (
-        <div>
-          <p className="text-muted-foreground mb-6">
-            You don&apos;t have any venues yet. Create one to get started.
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <Store className="h-16 w-16 text-muted-foreground/50 mb-4" />
+          <h2 className="text-lg font-medium mb-2">No venues yet</h2>
+          <p className="text-sm text-muted-foreground mb-6 max-w-sm">
+            Create your first venue to start building menus and accepting orders.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <CreateVenueCard />
-          </div>
+          <CreateVenueCard />
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
