@@ -15,16 +15,16 @@ export function CategoryNav({ categories, activeId }: CategoryNavProps) {
 
   return (
     <nav
-      className="sticky top-0 z-40 flex gap-2 overflow-x-auto border-b border-gray-100 bg-white px-4 py-3 scroll-smooth shadow-[0_1px_3px_rgba(0,0,0,0.05)] [&::-webkit-scrollbar]:hidden"
+      className="sticky top-0 z-40 flex snap-x snap-mandatory gap-2 overflow-x-auto border-b border-gray-100 bg-white px-4 py-3 scroll-smooth shadow-[0_2px_8px_rgba(0,0,0,0.06)] [&::-webkit-scrollbar]:hidden"
       aria-label="Menu categories"
     >
       {categories.map(category => (
         <button
           key={category.id}
           onClick={() => scrollToCategory(category.id)}
-          className={`shrink-0 rounded-full px-5 py-2 text-sm font-medium transition-colors ${
+          className={`shrink-0 snap-start rounded-full px-5 py-2.5 text-sm font-medium transition-colors ${
             activeId === category.id
-              ? 'bg-black text-white'
+              ? 'bg-primary text-white'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >

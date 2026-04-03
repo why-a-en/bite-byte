@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { motion } from 'motion/react';
 import {
   Drawer,
   DrawerContent,
@@ -32,7 +33,9 @@ export function CartDrawer({
       <DrawerContent className="max-h-[85vh]">
         <DrawerHeader className="border-b border-gray-100">
           <div className="flex items-center justify-between">
-            <DrawerTitle className="text-lg font-bold">Your Cart</DrawerTitle>
+            <DrawerTitle className="text-lg font-bold">
+              Your Cart{items.length > 0 && <span className="text-gray-400 font-medium ml-1">({items.reduce((sum, i) => sum + i.quantity, 0)})</span>}
+            </DrawerTitle>
             <button
               type="button"
               onClick={onClose}
@@ -57,8 +60,14 @@ export function CartDrawer({
             </div>
           ) : (
             <ul className="divide-y divide-gray-100">
-              {items.map(item => (
-                <li key={item.menuItemId} className="flex items-center gap-4 px-4 py-4">
+              {items.map((item, index) => (
+                <motion.li
+                  key={item.menuItemId}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.2, delay: index * 0.03 }}
+                  className="flex items-center gap-4 px-4 py-4"
+                >
                   {/* Item info */}
                   <div className="min-w-0 flex-1">
                     <p className="font-medium text-gray-900">{item.name}</p>
@@ -72,7 +81,7 @@ export function CartDrawer({
                     <button
                       type="button"
                       onClick={() => onUpdateQuantity(item.menuItemId, item.quantity - 1)}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:border-gray-400 hover:bg-gray-50"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 text-gray-600 transition-colors hover:border-primary hover:text-primary hover:bg-primary/5"
                       aria-label="Decrease quantity"
                     >
                       <span className="text-lg leading-none">−</span>
@@ -85,7 +94,7 @@ export function CartDrawer({
                     <button
                       type="button"
                       onClick={() => onUpdateQuantity(item.menuItemId, item.quantity + 1)}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:border-gray-400 hover:bg-gray-50"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 text-gray-600 transition-colors hover:border-primary hover:text-primary hover:bg-primary/5"
                       aria-label="Increase quantity"
                     >
                       <span className="text-lg leading-none">+</span>
@@ -108,7 +117,7 @@ export function CartDrawer({
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
-                </li>
+                </motion.li>
               ))}
             </ul>
           )}
@@ -119,13 +128,13 @@ export function CartDrawer({
           <DrawerFooter className="border-t border-gray-100">
             <div className="mb-3 flex items-center justify-between">
               <span className="text-base font-semibold text-gray-900">Total</span>
-              <span className="text-base font-bold text-gray-900">
+              <span className="text-lg font-bold text-primary">
                 £{total.toFixed(2)}
               </span>
             </div>
             <Link
               href={`/menu/${venueSlug}/checkout`}
-              className="block w-full rounded-full bg-black py-4 text-center text-lg font-semibold text-white transition-opacity hover:opacity-90 active:opacity-80"
+              className="block w-full rounded-full bg-primary py-4 text-center text-lg font-semibold text-white transition-colors hover:bg-primary/90 active:bg-primary/80"
               onClick={onClose}
             >
               Checkout

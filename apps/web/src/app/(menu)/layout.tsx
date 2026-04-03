@@ -10,6 +10,6 @@ export default function MenuLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-gray-50/50">{children}</div>
+    <div className="min-h-screen bg-white">{children}</div>
   );
 }

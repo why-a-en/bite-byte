@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'motion/react';
 import {
   Drawer,
   DrawerContent,
@@ -27,6 +28,9 @@ export function ItemDetailSheet({ item, onClose, onAddToCart }: ItemDetailSheetP
       <DrawerContent className="max-h-[85vh]">
         {item && (
           <>
+            {/* Decorative orange accent */}
+            <div className="mx-auto mt-2 h-1 w-12 rounded-full bg-primary/30" />
+
             {/* Full-width image */}
             {item.imageUrl && (
               <div className="h-64 w-full overflow-hidden rounded-t-xl">
@@ -41,7 +45,7 @@ export function ItemDetailSheet({ item, onClose, onAddToCart }: ItemDetailSheetP
 
             <DrawerHeader className="text-left">
               <DrawerTitle className="text-xl font-bold">{item.name}</DrawerTitle>
-              <p className="mt-1 text-2xl font-bold text-gray-900">
+              <p className="mt-1 text-2xl font-bold text-primary">
                 £{parseFloat(item.price).toFixed(2)}
               </p>
               {item.description && (
@@ -52,13 +56,14 @@ export function ItemDetailSheet({ item, onClose, onAddToCart }: ItemDetailSheetP
             </DrawerHeader>
 
             <DrawerFooter>
-              <button
+              <motion.button
                 type="button"
                 onClick={handleAddToCart}
-                className="w-full rounded-full bg-black py-4 text-lg font-semibold text-white transition-opacity hover:opacity-90 active:opacity-80"
+                whileTap={{ scale: 0.97 }}
+                className="w-full rounded-full bg-primary py-4 text-lg font-semibold text-white transition-colors hover:bg-primary/90 active:bg-primary/80 cursor-pointer"
               >
                 Add to Cart
-              </button>
+              </motion.button>
             </DrawerFooter>
           </>
         )}

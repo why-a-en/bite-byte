@@ -15,21 +15,21 @@ export function MenuItemRow({ item, onTap }: MenuItemRowProps) {
       type="button"
       onClick={() => available && onTap(item)}
       disabled={!available}
-      className={`flex w-full items-center gap-4 border-b border-gray-100 px-4 py-5 text-left transition-colors ${
+      className={`flex w-full items-center gap-4 border-b border-gray-100 border-l-3 border-l-transparent px-5 py-4 text-left transition-all ${
         available
-          ? 'active:bg-gray-50 cursor-pointer'
+          ? 'active:bg-gray-50 active:border-l-primary cursor-pointer'
           : 'opacity-50 cursor-not-allowed'
       }`}
     >
       {/* Left: text content */}
       <div className="min-w-0 flex-1">
-        <p className="text-base font-bold text-gray-900">{item.name}</p>
+        <p className="text-[15px] font-semibold text-gray-900">{item.name}</p>
         {item.description && (
           <p className="mt-0.5 line-clamp-2 text-sm text-gray-500">
             {item.description}
           </p>
         )}
-        <p className="mt-1 font-semibold text-primary">
+        <p className="mt-1 font-bold text-primary">
           £{parseFloat(item.price).toFixed(2)}
         </p>
       </div>
@@ -41,7 +41,7 @@ export function MenuItemRow({ item, onTap }: MenuItemRowProps) {
           <img
             src={item.imageUrl}
             alt={item.name}
-            className="h-20 w-20 rounded-xl object-cover shadow-sm"
+            className="h-[76px] w-[76px] rounded-2xl object-cover shadow-sm"
           />
         </div>
       )}
