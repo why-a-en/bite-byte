@@ -114,7 +114,7 @@ export default function AnimatedLanding() {
 
   useEffect(() => {
     // Match body bg to landing page so pinned scroll gaps don't show white
-    document.body.style.backgroundColor = '#0C0C0C';
+    document.body.style.backgroundColor = '#ffffff';
     return () => { document.body.style.backgroundColor = ''; };
   }, []);
 
@@ -245,20 +245,20 @@ export default function AnimatedLanding() {
 
   return (
     <LenisSmoothScroll>
-      <div className="min-h-screen flex flex-col bg-[#0C0C0C] overflow-x-hidden text-white">
+      <div className="min-h-screen flex flex-col bg-white overflow-x-hidden text-gray-900">
         <MagneticCursor />
 
         {/* ═══════════════ NAV ═══════════════ */}
-        <header ref={navRef} className="sticky top-0 z-50 bg-[#0C0C0C]/80 backdrop-blur-xl border-b border-white/[0.06]">
+        <header ref={navRef} className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-200">
           <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
-            <Link href="/" className="text-xl font-bold tracking-tight text-white">
+            <Link href="/" className="text-xl font-bold tracking-tight text-gray-900">
               Bite <span className="text-orange-500">Byte</span>
             </Link>
             <nav className="flex items-center gap-3">
               <Link
                 data-magnetic
                 href="/login"
-                className="text-sm font-medium text-gray-400 hover:text-white transition-colors px-3 py-2"
+                className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors px-3 py-2"
               >
                 Log in
               </Link>
@@ -286,8 +286,8 @@ export default function AnimatedLanding() {
                 className="w-full h-full object-cover"
                 data-blob-1
               />
-              {/* Dark overlay for text readability */}
-              <div className="absolute inset-0 bg-[#0C0C0C]/75" />
+              {/* Light overlay for text readability */}
+              <div className="absolute inset-0 bg-white/60" />
               {/* Orange accent glow */}
               <div
                 data-blob-2
@@ -300,15 +300,15 @@ export default function AnimatedLanding() {
                 style={{ background: 'radial-gradient(circle, rgba(251,191,36,0.06) 0%, transparent 60%)', filter: 'blur(100px)' }}
               />
               {/* Bottom gradient for smooth transition to page bg */}
-              <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0C0C0C] to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white to-transparent" />
             </div>
 
             {/* Floating decorative orbs */}
-            <div data-float className="absolute top-24 left-[10%] w-3 h-3 rounded-full bg-orange-500/20" aria-hidden="true" />
-            <div data-float className="absolute top-40 right-[15%] w-2 h-2 rounded-full bg-amber-500/15" aria-hidden="true" />
-            <div data-float className="absolute bottom-32 left-[20%] w-4 h-4 rounded-full bg-orange-400/10" aria-hidden="true" />
-            <div data-float className="absolute top-32 right-[25%] w-2.5 h-2.5 rounded-full bg-orange-500/15" aria-hidden="true" />
-            <div data-float className="absolute bottom-20 right-[10%] w-3 h-3 rounded-full bg-amber-400/10" aria-hidden="true" />
+            <div data-float className="absolute top-24 left-[10%] w-3 h-3 rounded-full bg-orange-500/25" aria-hidden="true" />
+            <div data-float className="absolute top-40 right-[15%] w-2 h-2 rounded-full bg-amber-500/20" aria-hidden="true" />
+            <div data-float className="absolute bottom-32 left-[20%] w-4 h-4 rounded-full bg-orange-400/15" aria-hidden="true" />
+            <div data-float className="absolute top-32 right-[25%] w-2.5 h-2.5 rounded-full bg-orange-500/20" aria-hidden="true" />
+            <div data-float className="absolute bottom-20 right-[10%] w-3 h-3 rounded-full bg-amber-400/15" aria-hidden="true" />
 
             <div className="max-w-4xl mx-auto text-center relative z-10">
               {/* Badge */}
@@ -328,7 +328,7 @@ export default function AnimatedLanding() {
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.08] mb-6">
                 <SplitText
                   text="From QR Scan to Kitchen"
-                  className="text-white"
+                  className="text-gray-900"
                   delay={0.2}
                 />
                 <br />
@@ -346,7 +346,7 @@ export default function AnimatedLanding() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.9, delay: 0.8, ease: 'easeOut' }}
-                className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed"
+                className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed"
               >
                 Let your customers order from their phone. No app download. No account required.
                 Just scan, order, done.
@@ -370,7 +370,7 @@ export default function AnimatedLanding() {
                 <a
                   data-magnetic
                   href="#how-it-works"
-                  className="inline-flex items-center justify-center h-11 rounded-full px-8 text-base font-medium border border-white/30 text-white bg-transparent hover:border-orange-400 hover:bg-orange-500/10 transition-all"
+                  className="inline-flex items-center justify-center h-11 rounded-full px-8 text-base font-medium border border-gray-300 text-gray-700 bg-transparent hover:border-orange-400 hover:bg-orange-50 transition-all"
                 >
                   See How It Works
                 </a>
@@ -379,7 +379,7 @@ export default function AnimatedLanding() {
           </section>
 
           {/* ═══════════════ STATS ═══════════════ */}
-          <section ref={statsRef} className="bg-white/[0.03] py-14 px-4 border-y border-white/[0.06]">
+          <section ref={statsRef} className="bg-gray-50 py-14 px-4 border-y border-gray-100">
             <div className="max-w-5xl mx-auto">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 {stats.map((s) => (
@@ -412,7 +412,7 @@ export default function AnimatedLanding() {
               <span className="inline-block px-3 py-1 rounded-full bg-orange-500/10 text-orange-400 text-xs font-semibold uppercase tracking-wider mb-4 border border-orange-500/20">
                 Features
               </span>
-              <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white">
+              <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900">
                 Everything You Need to{' '}
                 <span className="bg-gradient-to-r from-orange-500 to-amber-400 bg-clip-text text-transparent">
                   Modernize
@@ -424,7 +424,7 @@ export default function AnimatedLanding() {
             {/* Mobile: vertical cards */}
             <div className="md:hidden px-4 pb-16 space-y-6">
               {panels.map((panel) => (
-                <div key={panel.number} className="rounded-2xl overflow-hidden bg-white/[0.04] border border-white/[0.08]">
+                <div key={panel.number} className="rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm">
                   <div className="aspect-[16/10] overflow-hidden">
                     <img
                       src={panel.image}
@@ -434,12 +434,12 @@ export default function AnimatedLanding() {
                     />
                   </div>
                   <div className="p-8">
-                    <div className="text-7xl font-black text-white/[0.04] mb-4 leading-none">{panel.number}</div>
+                    <div className="text-7xl font-black text-gray-100 mb-4 leading-none">{panel.number}</div>
                     <div className="w-16 h-16 rounded-2xl bg-orange-500/10 text-orange-500 flex items-center justify-center mb-6">
                       {panel.icon}
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-3">{panel.title}</h3>
-                    <p className="text-gray-400 leading-relaxed">{panel.desc}</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3">{panel.title}</h3>
+                    <p className="text-gray-500 leading-relaxed">{panel.desc}</p>
                   </div>
                 </div>
               ))}
@@ -451,7 +451,7 @@ export default function AnimatedLanding() {
                 {panels.map((panel, i) => (
                   <div
                     key={panel.number}
-                    className="w-screen h-screen shrink-0 flex items-center bg-[#0C0C0C] relative"
+                    className="w-screen h-screen shrink-0 flex items-center bg-white relative"
                     style={{ minWidth: '100vw' }}
                   >
                     {/* Full-bleed background image with overlay */}
@@ -463,13 +463,13 @@ export default function AnimatedLanding() {
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      {/* Dark gradient overlay — heavier on text side */}
+                      {/* Light gradient overlay — heavier on text side */}
                       <div
                         className="absolute inset-0"
                         style={{
                           background: i % 2 === 0
-                            ? 'linear-gradient(to right, rgba(12,12,12,0.92) 0%, rgba(12,12,12,0.75) 45%, rgba(12,12,12,0.3) 100%)'
-                            : 'linear-gradient(to left, rgba(12,12,12,0.92) 0%, rgba(12,12,12,0.75) 45%, rgba(12,12,12,0.3) 100%)',
+                            ? 'linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.8) 45%, rgba(255,255,255,0.3) 100%)'
+                            : 'linear-gradient(to left, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.8) 45%, rgba(255,255,255,0.3) 100%)',
                         }}
                       />
                       {/* Subtle orange tint at the image edge */}
@@ -488,7 +488,7 @@ export default function AnimatedLanding() {
                       {/* Text side */}
                       <div className="w-1/2 px-16 xl:px-24 relative">
                         {/* Large watermark number */}
-                        <div className="absolute -top-20 -left-4 text-[200px] font-black text-white/[0.03] leading-none select-none pointer-events-none">
+                        <div className="absolute -top-20 -left-4 text-[200px] font-black text-gray-900/4 leading-none select-none pointer-events-none">
                           {panel.number}
                         </div>
 
@@ -499,10 +499,10 @@ export default function AnimatedLanding() {
                             <span className="w-1 h-1 rounded-full bg-orange-500/40" />
                             <span className="text-orange-400/70 text-xs font-medium uppercase tracking-wider">Feature</span>
                           </div>
-                          <h3 className="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                          <h3 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
                             {panel.title}
                           </h3>
-                          <p className="text-xl text-gray-400 leading-relaxed">
+                          <p className="text-xl text-gray-600 leading-relaxed">
                             {panel.desc}
                           </p>
                         </div>
@@ -518,7 +518,7 @@ export default function AnimatedLanding() {
           </section>
 
           {/* ═══════════════ HOW IT WORKS ═══════════════ */}
-          <section ref={stepsRef} id="how-it-works" className="py-24 md:py-40 px-4 bg-gradient-to-b from-white/[0.02] to-transparent relative overflow-hidden">
+          <section ref={stepsRef} id="how-it-works" className="py-24 md:py-40 px-4 bg-gradient-to-b from-gray-50 to-transparent relative overflow-hidden">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-150 h-150 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.06) 0%, transparent 70%)', filter: 'blur(80px)' }} aria-hidden="true" />
 
             <div className="max-w-5xl mx-auto relative z-10">
@@ -526,7 +526,7 @@ export default function AnimatedLanding() {
                 <span className="inline-block px-3 py-1 rounded-full bg-orange-500/10 text-orange-400 text-xs font-semibold uppercase tracking-wider mb-4 border border-orange-500/20">
                   How It Works
                 </span>
-                <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white">
+                <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-gray-900">
                   Up and Running in{' '}
                   <span className="bg-gradient-to-r from-orange-500 to-amber-400 bg-clip-text text-transparent">3 Steps</span>
                 </h2>
@@ -549,7 +549,7 @@ export default function AnimatedLanding() {
                       {s.num}
                     </div>
                     <div data-step-text>
-                      <h3 className="text-xl font-semibold mb-3 text-white">{s.title}</h3>
+                      <h3 className="text-xl font-semibold mb-3 text-gray-900">{s.title}</h3>
                       <p className="text-gray-500 leading-relaxed max-w-xs mx-auto">{s.desc}</p>
                     </div>
                   </div>
@@ -559,7 +559,7 @@ export default function AnimatedLanding() {
           </section>
 
           {/* ═══════════════ DARK STATS BANNER ═══════════════ */}
-          <section className="py-20 px-4 bg-white/[0.03] border-y border-white/[0.06] relative overflow-hidden">
+          <section className="py-20 px-4 bg-gray-50 border-y border-gray-100 relative overflow-hidden">
             <div className="absolute top-0 left-1/4 w-100 h-100 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%)', filter: 'blur(80px)' }} aria-hidden="true" />
             <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center relative z-10">
               {[
