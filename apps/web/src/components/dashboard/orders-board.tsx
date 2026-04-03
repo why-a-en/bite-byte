@@ -1,6 +1,19 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import {
+  DndContext,
+  DragOverlay,
+  useDroppable,
+  PointerSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  closestCorners,
+  type DragStartEvent,
+  type DragEndEvent,
+} from '@dnd-kit/core';
+import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { Volume2, VolumeX, ClipboardList } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -9,7 +22,7 @@ import { socket } from '@/lib/socket';
 import { playOrderAlert } from '@/lib/audio-alert';
 import { fetchActiveOrders, updateOrderStatus, type Order } from '@/actions/orders';
 import { ConnectionBanner } from './connection-banner';
-import { OrderCard } from './order-card';
+import { OrderCard, OrderCardDragPreview } from './order-card';
 
 interface OrdersBoardProps {
   venueId: string;
@@ -35,8 +48,34 @@ const COLUMN_BG_COLORS: Record<string, string> = {
   READY: 'bg-green-50',
 };
 
+function DroppableColumn({
+  status,
+  children,
+  className,
+}: {
+  status: string;
+  children: React.ReactNode;
+  className: string;
+}) {
+  const { setNodeRef, isOver } = useDroppable({ id: status });
+  return (
+    <div
+      ref={setNodeRef}
+      className={`${className} transition-all ${isOver ? 'ring-2 ring-primary/60 ring-offset-1' : ''}`}
+    >
+      {children}
+    </div>
+  );
+}
+
 export function OrdersBoard({ venueId, initialOrders, token }: OrdersBoardProps) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
+  const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor),
+  );
   const [connected, setConnected] = useState(false);
   const hasConnectedOnce = useRef(false);
   const [isMuted, setIsMuted] = useState<boolean>(() => {
@@ -207,10 +246,40 @@ export function OrdersBoard({ venueId, initialOrders, token }: OrdersBoardProps)
     [venueId, scheduleAutoHide],
   );
 
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    setActiveOrderId(event.active.id as string);
+  }, []);
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      setActiveOrderId(null);
+      const { active, over } = event;
+      if (!over) return;
+
+      const orderId = active.id as string;
+      const newStatus = over.id as string;
+
+      // Find the order's current status
+      const order = orders.find((o) => o.id === orderId);
+      if (!order || order.status === newStatus) return;
+
+      handleStatusUpdate(orderId, newStatus);
+    },
+    [orders, handleStatusUpdate],
+  );
+
+  const handleDragCancel = useCallback(() => {
+    setActiveOrderId(null);
+  }, []);
+
   // Filter out cancelled orders client-side (belt-and-suspenders)
   const visibleOrders = orders.filter(
     (o) => o.status !== 'CANCELLED' && o.status !== 'PENDING_PAYMENT',
   );
+
+  const activeOrder = activeOrderId
+    ? visibleOrders.find((o) => o.id === activeOrderId) ?? null
+    : null;
 
   return (
     <div className="flex flex-col h-full">
@@ -241,44 +310,61 @@ export function OrdersBoard({ venueId, initialOrders, token }: OrdersBoardProps)
             </p>
           </div>
         ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
-          {COLUMNS.map(({ label, status }) => {
-            const columnOrders = visibleOrders.filter((o) => o.status === status);
-            const headerColor = COLUMN_HEADER_COLORS[status];
+        <DndContext
+          id="orders-kanban-dnd"
+          sensors={sensors}
+          collisionDetection={closestCorners}
+          modifiers={[restrictToWindowEdges]}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          onDragCancel={handleDragCancel}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
+            {COLUMNS.map(({ label, status }) => {
+              const columnOrders = visibleOrders.filter((o) => o.status === status);
+              const headerColor = COLUMN_HEADER_COLORS[status];
+              const columnBg = COLUMN_BG_COLORS[status] ?? '';
 
-            const columnBg = COLUMN_BG_COLORS[status] ?? '';
+              return (
+                <DroppableColumn
+                  key={status}
+                  status={status}
+                  className={`flex flex-col gap-3 p-3 rounded-xl ${columnBg}`}
+                >
+                  {/* Column header */}
+                  <div className="flex items-center gap-2">
+                    <h2 className={`font-semibold text-sm uppercase tracking-wide ${headerColor}`}>
+                      {label}
+                    </h2>
+                    <Badge variant="secondary" className="text-xs px-1.5 py-0">
+                      {columnOrders.length}
+                    </Badge>
+                  </div>
 
-            return (
-              <div key={status} className={`flex flex-col gap-3 p-3 rounded-xl ${columnBg}`}>
-                {/* Column header */}
-                <div className="flex items-center gap-2">
-                  <h2 className={`font-semibold text-sm uppercase tracking-wide ${headerColor}`}>
-                    {label}
-                  </h2>
-                  <Badge variant="secondary" className="text-xs px-1.5 py-0">
-                    {columnOrders.length}
-                  </Badge>
-                </div>
+                  {/* Order cards */}
+                  <div className="space-y-2 flex-1">
+                    {columnOrders.length === 0 ? (
+                      <p className="text-xs text-muted-foreground text-center py-4">No orders</p>
+                    ) : (
+                      columnOrders.map((order) => (
+                        <OrderCard
+                          key={order.id}
+                          order={order}
+                          onStatusUpdate={handleStatusUpdate}
+                          isNew={newOrderIds.has(order.id)}
+                        />
+                      ))
+                    )}
+                  </div>
+                </DroppableColumn>
+              );
+            })}
+          </div>
 
-                {/* Order cards */}
-                <div className="space-y-2 flex-1">
-                  {columnOrders.length === 0 ? (
-                    <p className="text-xs text-muted-foreground text-center py-4">No orders</p>
-                  ) : (
-                    columnOrders.map((order) => (
-                      <OrderCard
-                        key={order.id}
-                        order={order}
-                        onStatusUpdate={handleStatusUpdate}
-                        isNew={newOrderIds.has(order.id)}
-                      />
-                    ))
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+          <DragOverlay>
+            {activeOrder ? <OrderCardDragPreview order={activeOrder} /> : null}
+          </DragOverlay>
+        </DndContext>
         )}
       </div>
     </div>

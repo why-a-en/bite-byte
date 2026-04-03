@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useDraggable } from '@dnd-kit/core';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
@@ -60,6 +61,10 @@ export function OrderCard({ order, onStatusUpdate, isNew = false }: OrderCardPro
   const [relativeTime, setRelativeTime] = useState(() => formatRelativeTime(order.createdAt));
   const [highlight, setHighlight] = useState(isNew);
 
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: order.id,
+  });
+
   // Update relative time every 30 seconds
   useEffect(() => {
     const interval = setInterval(() => {
@@ -96,7 +101,10 @@ export function OrderCard({ order, onStatusUpdate, isNew = false }: OrderCardPro
 
   return (
     <Card
-      className={`cursor-pointer border-l-[3px] ${borderColor} shadow-sm hover:shadow-md transition-shadow ${highlight ? 'animate-pulse' : ''}`}
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      className={`cursor-pointer border-l-[3px] ${borderColor} shadow-sm hover:shadow-md transition-shadow ${highlight ? 'animate-pulse' : ''} ${isDragging ? 'opacity-50' : ''}`}
       onClick={handleCardClick}
     >
       <CardContent className="p-3">
@@ -172,6 +180,24 @@ export function OrderCard({ order, onStatusUpdate, isNew = false }: OrderCardPro
             </div>
           </div>
         )}
+      </CardContent>
+    </Card>
+  );
+}
+
+export function OrderCardDragPreview({ order }: { order: Order }) {
+  return (
+    <Card className="border-l-[3px] border-l-blue-500 shadow-lg w-70 rotate-2">
+      <CardContent className="p-3">
+        <div className="flex items-center gap-2">
+          <span className="font-mono font-semibold text-sm bg-muted/50 px-1.5 py-0.5 rounded">
+            {order.referenceCode}
+          </span>
+          <span className="text-sm font-medium">{order.customerName}</span>
+        </div>
+        <div className="text-xs text-muted-foreground mt-1">
+          {order.items.length} item{order.items.length !== 1 ? 's' : ''}
+        </div>
       </CardContent>
     </Card>
   );
