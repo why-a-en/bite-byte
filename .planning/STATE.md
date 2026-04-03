@@ -15,8 +15,8 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 **Current Plan:** 5/5 (all complete)
 **Total Plans in Phase:** 5
 **Status:** Phase complete — ready for verification
-**Last Activity:** 2026-04-04
-**Last Activity Description:** Completed quick task 11: QR slab double-sided with realistic 3D materials
+**Last Activity:** 2026-04-03
+**Last Activity Description:** Completed quick task 12: Add drag-and-drop to live orders board
 **Progress:** [█████████░] 89%
 
 ## Performance Metrics
@@ -134,6 +134,7 @@ None yet.
 | 9 | Enhance landing page with visual mockups and decorative elements | 2026-04-03 | a8f9504 | [9-enhance-landing-page-with-images-and-mod](./quick/9-enhance-landing-page-with-images-and-mod/) |
 | 10 | Add 3D animated food and QR objects to landing hero | 2026-04-03 | b81974e | [10-add-3d-animated-food-and-qr-objects-to-l](./quick/10-add-3d-animated-food-and-qr-objects-to-l/) |
 | 11 | QR slab double-sided with realistic 3D materials | 2026-04-04 | 6df1ecd | [11-qr-slab-double-sided-with-qr-on-both-fac](./quick/11-qr-slab-double-sided-with-qr-on-both-fac/) |
+| 12 | Add drag-and-drop to live orders board | 2026-04-03 | adf7cc3 | [12-add-drag-and-drop-to-live-orders-board-f](./quick/12-add-drag-and-drop-to-live-orders-board-f/) |
 
 ### Blockers/Concerns
 
@@ -145,5 +146,5 @@ None yet.
 
 **Paused At:** None
 Last session: 2026-04-03
-**Stopped At:** Completed quick task 10 (Add 3D Animated Food and QR Objects to Landing Hero)
+**Stopped At:** Completed quick task 12 (Add drag-and-drop to live orders board)
 Resume file: None
