@@ -1,9 +1,14 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { motion, useInView } from 'motion/react';
+
+const Landing3DScene = dynamic(() => import('./landing-3d-scene'), {
+  ssr: false,
+});
 import { Button } from '@/components/ui/button';
 import {
   QrCode,
@@ -303,38 +308,18 @@ export default function AnimatedLanding() {
                   </motion.div>
                 </div>
 
-                {/* Right column — hero image */}
+                {/* Right column — 3D scene */}
                 <motion.div
-                  initial={{ opacity: 0, x: 40, scale: 0.95 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="hidden lg:block relative"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="hidden lg:block relative h-[480px]"
                 >
-                  <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-orange-500/10">
-                    <Image
-                      src="/images/hero-restaurant.jpg"
-                      alt="Modern restaurant interior with warm lighting"
-                      width={1200}
-                      height={800}
-                      className="object-cover w-full h-[480px]"
-                      priority
-                    />
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-                    {/* Floating card on image */}
-                    <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md rounded-xl p-4 shadow-lg border border-white/50">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-orange-500 text-white flex items-center justify-center flex-shrink-0">
-                          <QrCode className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900">New order incoming</p>
-                          <p className="text-xs text-gray-500">Table 4 &middot; 3 items &middot; $24.50</p>
-                        </div>
-                        <span className="ml-auto text-xs font-medium text-orange-500 bg-orange-50 px-2 py-1 rounded-full">Live</span>
-                      </div>
-                    </div>
-                  </div>
+                  <Suspense fallback={
+                    <div className="w-full h-full rounded-2xl bg-gradient-to-br from-orange-50 to-amber-50 animate-pulse" />
+                  }>
+                    <Landing3DScene />
+                  </Suspense>
                 </motion.div>
               </div>
             </div>
