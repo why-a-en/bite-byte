@@ -36,7 +36,7 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 **Total Plans in Phase:** 5
 **Status:** Phase complete — ready for verification
 **Last Activity:** 2026-04-04
-**Last Activity Description:** Completed quick task 14: General reliability audit
+**Last Activity Description:** Completed quick task 15: Unit tests for key API services
 **Progress:** [█████████░] 89%
 
 ## Performance Metrics
@@ -158,6 +158,7 @@ None yet.
 | 12 | Add drag-and-drop to live orders board | 2026-04-03 | adf7cc3 | [12-add-drag-and-drop-to-live-orders-board-f](./quick/12-add-drag-and-drop-to-live-orders-board-f/) |
 | 13 | Polish customer ordering flow | 2026-04-03 | 018ccb8 | [13-polish-customer-ordering-flow-menu-brows](./quick/13-polish-customer-ordering-flow-menu-brows/) |
 | 14 | General reliability audit - cleanup orphaned files and unused deps | 2026-04-04 | ac8b06c | [14-general-reliability-audit-fix-build-erro](./quick/14-general-reliability-audit-fix-build-erro/) |
+| 15 | Write unit tests for key API services (Auth, Orders, Categories) | 2026-04-04 | 7c7d4d9 | [15-write-tests-for-key-features-api-endpoin](./quick/15-write-tests-for-key-features-api-endpoin/) |
 
 ### Blockers/Concerns
 
@@ -169,5 +170,5 @@ None yet.
 
 **Paused At:** None
 Last session: 2026-04-03T18:28:35.212Z
-**Stopped At:** Completed quick task 13 (Polish customer ordering flow)
+**Stopped At:** Completed quick task 15 (Unit tests for key API services)
 Resume file: None
