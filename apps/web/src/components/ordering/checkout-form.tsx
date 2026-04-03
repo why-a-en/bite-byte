@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'motion/react';
 import { useCart } from '@/lib/cart';
 import { fetchPublicApi } from '@/lib/api-public';
 import { toast } from 'sonner';
@@ -171,9 +172,9 @@ export function CheckoutForm({ venue }: Props) {
     const returnUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/menu/${venue.slug}/order/${orderId}`;
     return (
       <div className="space-y-6">
-        <div className="bg-gray-50 rounded-lg p-4">
+        <div className="bg-primary/5 border border-primary/20 rounded-2xl p-4">
           <p className="text-sm text-gray-600">Paying for order from <strong>{venue.name}</strong></p>
-          <p className="text-lg font-semibold mt-1">Total: £{total.toFixed(2)}</p>
+          <p className="text-lg font-bold text-primary mt-1">Total: £{total.toFixed(2)}</p>
         </div>
         {error && (
           <p className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-4 py-3">
@@ -193,9 +194,12 @@ export function CheckoutForm({ venue }: Props) {
   const isPACFlow = paymentChoice === 'PAY_AT_COUNTER';
 
   return (
-    <form
+    <motion.form
       onSubmit={isPACFlow ? handlePACSubmit : handleStripeInitiate}
       className="space-y-6"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
     >
       {/* Customer name */}
       <div>
@@ -209,7 +213,7 @@ export function CheckoutForm({ venue }: Props) {
           onChange={(e) => setCustomerName(e.target.value)}
           placeholder="Enter your name"
           required
-          className="w-full border border-gray-300 rounded-lg px-4 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-black"
+          className="w-full border border-gray-300 rounded-lg px-4 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
         />
       </div>
 
@@ -221,7 +225,7 @@ export function CheckoutForm({ venue }: Props) {
             <label
               className={`flex items-center gap-3 cursor-pointer border rounded-xl p-4 transition-colors ${
                 paymentChoice === 'STRIPE'
-                  ? 'border-black bg-gray-50'
+                  ? 'border-primary bg-primary/5'
                   : 'border-gray-200 hover:border-gray-300'
               }`}
             >
@@ -231,14 +235,18 @@ export function CheckoutForm({ venue }: Props) {
                 value="STRIPE"
                 checked={paymentChoice === 'STRIPE'}
                 onChange={() => setPaymentChoice('STRIPE')}
-                className="w-4 h-4"
+                className="w-4 h-4 accent-primary"
               />
+              {/* Credit card icon */}
+              <svg className="h-5 w-5 text-gray-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+              </svg>
               <span className="text-base">Pay now (card / Apple Pay / Google Pay)</span>
             </label>
             <label
               className={`flex items-center gap-3 cursor-pointer border rounded-xl p-4 transition-colors ${
                 paymentChoice === 'PAY_AT_COUNTER'
-                  ? 'border-black bg-gray-50'
+                  ? 'border-primary bg-primary/5'
                   : 'border-gray-200 hover:border-gray-300'
               }`}
             >
@@ -248,8 +256,12 @@ export function CheckoutForm({ venue }: Props) {
                 value="PAY_AT_COUNTER"
                 checked={paymentChoice === 'PAY_AT_COUNTER'}
                 onChange={() => setPaymentChoice('PAY_AT_COUNTER')}
-                className="w-4 h-4"
+                className="w-4 h-4 accent-primary"
               />
+              {/* Building icon */}
+              <svg className="h-5 w-5 text-gray-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+              </svg>
               <span className="text-base">Pay at counter</span>
             </label>
           </div>
@@ -260,14 +272,14 @@ export function CheckoutForm({ venue }: Props) {
       {items.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
           <p>Your cart is empty.</p>
-          <a href={`/menu/${venue.slug}`} className="text-black underline text-sm mt-2 inline-block">
+          <a href={`/menu/${venue.slug}`} className="text-primary underline text-sm mt-2 inline-block">
             Go back to menu
           </a>
         </div>
       ) : (
-        <div className="border border-gray-200 rounded-xl overflow-hidden">
-          <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
-            <h2 className="font-semibold text-sm text-gray-700">Order Summary</h2>
+        <div className="border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+          <div className="px-4 py-3 bg-primary/5 border-b border-gray-200">
+            <h2 className="font-semibold text-sm text-primary">Order Summary</h2>
           </div>
           <ul className="divide-y divide-gray-100">
             {items.map((item) => (
@@ -282,9 +294,9 @@ export function CheckoutForm({ venue }: Props) {
               </li>
             ))}
           </ul>
-          <div className="flex items-center justify-between px-4 py-3 bg-gray-50 border-t border-gray-200">
+          <div className="flex items-center justify-between px-4 py-3 bg-primary/5 border-t border-gray-200">
             <span className="font-semibold">Total</span>
-            <span className="font-bold">£{total.toFixed(2)}</span>
+            <span className="font-bold text-primary">£{total.toFixed(2)}</span>
           </div>
         </div>
       )}
@@ -308,18 +320,28 @@ export function CheckoutForm({ venue }: Props) {
 
       {/* Submit button */}
       {items.length > 0 && (
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-black text-white py-4 text-lg rounded-xl font-semibold disabled:opacity-50 cursor-pointer"
-        >
-          {loading
-            ? 'Processing...'
-            : isPACFlow
-              ? 'Place Order'
-              : 'Proceed to Payment'}
-        </button>
+        <div className="space-y-3">
+          <motion.button
+            type="submit"
+            disabled={loading}
+            whileTap={{ scale: 0.98 }}
+            className="w-full bg-primary text-white py-4 text-lg rounded-2xl font-semibold disabled:opacity-50 cursor-pointer transition-colors hover:bg-primary/90 active:bg-primary/80"
+          >
+            {loading
+              ? 'Processing...'
+              : isPACFlow
+                ? 'Place Order'
+                : 'Proceed to Payment'}
+          </motion.button>
+          {/* Trust signal */}
+          <div className="flex items-center justify-center gap-1.5 text-gray-400">
+            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+            <span className="text-xs">Secure & encrypted</span>
+          </div>
+        </div>
       )}
-    </form>
+    </motion.form>
   );
 }

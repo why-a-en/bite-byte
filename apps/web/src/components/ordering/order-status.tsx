@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { motion } from 'motion/react';
 import { socket } from '@/lib/socket';
 import type { PublicOrder } from '@/app/(menu)/menu/[slug]/order/[orderId]/page';
 
@@ -101,20 +102,53 @@ export function OrderStatus({ order, venueSlug }: Props) {
   }, [order.id]);
 
   const currentIndex = STATUS_INDEX[status];
+  const isActiveOrder = status === 'RECEIVED' || status === 'PREPARING';
 
   return (
-    <div className="space-y-6">
+    <motion.div
+      className="space-y-6"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       {/* Reference code — prominent at top */}
-      <div className="bg-gray-50 rounded-lg px-6 py-6 text-center border border-gray-200">
+      <div className="bg-primary/5 rounded-2xl px-6 py-6 text-center border border-primary/20">
         <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Order Reference</p>
-        <p className="text-4xl font-bold tracking-widest text-black">#{order.referenceCode}</p>
+        <div className="flex items-center justify-center gap-2">
+          {isActiveOrder && (
+            <motion.div
+              className="h-2.5 w-2.5 rounded-full bg-primary"
+              animate={{ scale: [1, 1.3, 1] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+            />
+          )}
+          <p className="text-4xl font-bold tracking-widest text-primary">#{order.referenceCode}</p>
+        </div>
         <p className="text-sm text-gray-600 mt-1">{order.customerName}&apos;s order</p>
       </div>
+
+      {/* Celebratory READY state */}
+      {(status === 'READY' || status === 'COMPLETED') && (
+        <div className="flex flex-col items-center py-2">
+          <motion.div
+            className="flex h-16 w-16 items-center justify-center rounded-full bg-green-500 text-white mb-3"
+            animate={{ scale: [0, 1.2, 1] }}
+            transition={{ type: 'spring', bounce: 0.5 }}
+          >
+            <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </motion.div>
+          <p className="text-xl font-bold text-green-600">
+            {status === 'READY' ? 'Your order is ready!' : 'Order complete!'}
+          </p>
+        </div>
+      )}
 
       {/* Status section */}
       {status === 'PENDING_PAYMENT' && (
         <div className="flex items-center gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-4">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-amber-400 border-t-transparent flex-shrink-0" />
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-amber-400 border-t-transparent shrink-0" />
           <div>
             <p className="font-medium text-amber-800">Awaiting payment confirmation</p>
             <p className="text-sm text-amber-600 mt-0.5">Please complete your payment to place the order.</p>
@@ -142,24 +176,31 @@ export function OrderStatus({ order, venueSlug }: Props) {
               <div key={step.status} className="flex items-start gap-4">
                 {/* Step indicator column */}
                 <div className="flex flex-col items-center">
-                  <div
-                    className={[
-                      'flex h-10 w-10 items-center justify-center rounded-full flex-shrink-0',
-                      isComplete
-                        ? 'bg-green-500 text-white'
-                        : isCurrent
-                          ? 'bg-black text-white'
-                          : 'border-2 border-gray-300 bg-white',
-                    ].join(' ')}
-                  >
-                    {isComplete ? (
-                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                    ) : isCurrent ? (
+                  {isCurrent ? (
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shrink-0"
+                    >
                       <div className="h-2.5 w-2.5 rounded-full bg-white" />
-                    ) : null}
-                  </div>
+                    </motion.div>
+                  ) : (
+                    <div
+                      className={[
+                        'flex h-10 w-10 items-center justify-center rounded-full shrink-0',
+                        isComplete
+                          ? 'bg-green-500 text-white'
+                          : 'border-2 border-gray-300 bg-white',
+                      ].join(' ')}
+                    >
+                      {isComplete ? (
+                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : null}
+                    </div>
+                  )}
                   {/* Connector line — skip after last step */}
                   {index < STEPS.length - 1 && (
                     <div
@@ -176,7 +217,7 @@ export function OrderStatus({ order, venueSlug }: Props) {
                   <p
                     className={[
                       'text-base font-medium',
-                      isComplete ? 'text-green-700' : isCurrent ? 'text-black' : 'text-gray-400',
+                      isComplete ? 'text-green-700' : isCurrent ? 'text-primary' : 'text-gray-400',
                     ].join(' ')}
                   >
                     {step.label}
@@ -197,9 +238,9 @@ export function OrderStatus({ order, venueSlug }: Props) {
       )}
 
       {/* Order items summary */}
-      <div className="border border-gray-200 rounded-lg overflow-hidden">
-        <div className="bg-gray-50 px-4 py-2.5 border-b border-gray-200">
-          <p className="text-sm font-medium text-gray-700">Your items</p>
+      <div className="border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+        <div className="bg-primary/5 px-4 py-2.5 border-b border-gray-200">
+          <p className="text-sm font-medium text-primary">Your items</p>
         </div>
         <ul className="divide-y divide-gray-100">
           {order.items.map((item, i) => (
@@ -213,9 +254,9 @@ export function OrderStatus({ order, venueSlug }: Props) {
             </li>
           ))}
         </ul>
-        <div className="flex justify-between items-center px-4 py-3 bg-gray-50 border-t border-gray-200">
+        <div className="flex justify-between items-center px-4 py-3 bg-primary/5 border-t border-gray-200">
           <span className="text-sm font-medium text-gray-700">Total</span>
-          <span className="text-sm font-semibold text-black">
+          <span className="text-sm font-bold text-primary">
             £{parseFloat(order.totalAmount).toFixed(2)}
           </span>
         </div>
@@ -225,11 +266,14 @@ export function OrderStatus({ order, venueSlug }: Props) {
       <div className="pt-2 text-center">
         <Link
           href={`/menu/${venueSlug}`}
-          className="text-sm text-gray-500 hover:text-gray-700 underline underline-offset-2"
+          className="inline-flex items-center gap-2 rounded-full border border-gray-200 px-5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
         >
-          &larr; Back to Menu
+          <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+          Back to Menu
         </Link>
       </div>
-    </div>
+    </motion.div>
   );
 }

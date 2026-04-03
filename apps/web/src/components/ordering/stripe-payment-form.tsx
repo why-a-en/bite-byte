@@ -2,6 +2,7 @@
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useState } from 'react';
+import { motion } from 'motion/react';
 
 // Module level — called once, never inside a component (Pitfall 4 prevention)
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
@@ -63,13 +64,14 @@ function PaymentForm({ onSuccess, onError, returnUrl }: PaymentFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <PaymentElement />
-      <button
+      <motion.button
         type="submit"
         disabled={loading || !stripe || !elements}
-        className="w-full bg-black text-white py-3 rounded-lg font-semibold disabled:opacity-50 cursor-pointer"
+        whileTap={{ scale: 0.98 }}
+        className="w-full bg-primary text-white py-3 rounded-2xl font-semibold disabled:opacity-50 cursor-pointer transition-colors hover:bg-primary/90"
       >
         {loading ? 'Processing...' : 'Pay Now'}
-      </button>
+      </motion.button>
     </form>
   );
 }
