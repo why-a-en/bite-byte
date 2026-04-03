@@ -1,10 +1,15 @@
-// Minimal layout for public customer pages — no sidebar, no auth
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Menu',
+  title: 'Menu — Bite Byte',
 };
 
-export default function MenuLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-screen bg-white">{children}</div>;
+export default function MenuLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="min-h-screen bg-gray-50/50">{children}</div>
+  );
 }

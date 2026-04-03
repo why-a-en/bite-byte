@@ -8,10 +8,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { rawBody: true });
   app.setGlobalPrefix('api');
   app.enableCors({
-    origin: process.env.CORS_ORIGIN ?? 'http://localhost:3000',
+    origin: process.env.CORS_ORIGIN ?? 'http://localhost:7000',
     credentials: true,
   });
-  const port = process.env['PORT'] ?? 3001;
+  const port = process.env['PORT'] ?? 7001;
   await app.listen(port);
   console.log(`API running on http://localhost:${port}/api`);
 }

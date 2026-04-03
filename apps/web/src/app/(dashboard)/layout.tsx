@@ -30,7 +30,11 @@ export default async function DashboardLayout({
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar venues={venues} />
-      <main className="flex-1 p-6 pt-16 lg:pt-6 overflow-y-auto">{children}</main>
+      <main className="flex-1 pt-16 lg:pt-0 overflow-y-auto">
+        <div className="max-w-6xl mx-auto px-6 lg:px-10 py-8 lg:py-10">
+          {children}
+        </div>
+      </main>
     </div>
   );
 }

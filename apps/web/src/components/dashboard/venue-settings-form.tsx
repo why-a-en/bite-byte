@@ -152,7 +152,7 @@ export function VenueSettingsForm({ venue }: VenueSettingsFormProps) {
             <p className="text-xs text-muted-foreground">
               Public menu URL:{' '}
               <code className="bg-muted px-1 rounded text-xs">
-                {process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'}/menu/{slug}
+                {process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:7000'}/menu/{slug}
               </code>
             </p>
           </div>
@@ -247,7 +247,7 @@ export function VenueSettingsForm({ venue }: VenueSettingsFormProps) {
         <p className="text-sm text-muted-foreground mb-3">
           Generate a QR code that customers scan to view your menu at{' '}
           <code className="bg-muted px-1 rounded text-xs">
-            {process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'}/menu/{venue.slug}
+            {process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:7000'}/menu/{venue.slug}
           </code>
         </p>
         <Button variant="outline" asChild>

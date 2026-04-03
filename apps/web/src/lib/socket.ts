@@ -8,7 +8,7 @@ import { io, Socket } from 'socket.io-client';
  * - reconnectionAttempts: 3 — after 3 failures, socket.active becomes false and we fall back to REST polling
  */
 export const socket: Socket = io(
-  process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001',
+  process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:7001',
   {
     autoConnect: false,
     reconnectionAttempts: 3,

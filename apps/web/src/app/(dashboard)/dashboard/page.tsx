@@ -25,15 +25,20 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-10">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+            Dashboard
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">
             Manage your venues and menus
           </p>
         </div>
         {venues.length > 0 && (
-          <Button asChild>
+          <Button
+            asChild
+            className="bg-orange-500 hover:bg-orange-600 text-white shadow-sm shadow-orange-500/20"
+          >
             <Link href="/venues/new">
               <Plus className="h-4 w-4 mr-2" />
               New Venue
@@ -43,16 +48,21 @@ export default async function DashboardPage() {
       </div>
 
       {venues.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <Store className="h-16 w-16 text-muted-foreground/50 mb-4" />
-          <h2 className="text-lg font-medium mb-2">No venues yet</h2>
-          <p className="text-sm text-muted-foreground mb-6 max-w-sm">
-            Create your first venue to start building menus and accepting orders.
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mb-5">
+            <Store className="h-7 w-7 text-gray-300" />
+          </div>
+          <h2 className="text-lg font-medium text-gray-900 mb-2">
+            No venues yet
+          </h2>
+          <p className="text-sm text-gray-500 mb-8 max-w-sm leading-relaxed">
+            Create your first venue to start building menus and accepting
+            orders.
           </p>
           <CreateVenueCard />
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {venues.map((venue) => (
             <VenueCard key={venue.id} venue={venue} />
           ))}

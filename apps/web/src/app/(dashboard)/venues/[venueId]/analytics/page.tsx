@@ -1,4 +1,8 @@
-import { fetchRevenue, fetchTopItems, fetchDailyVolume } from '@/actions/analytics';
+import {
+  fetchRevenue,
+  fetchTopItems,
+  fetchDailyVolume,
+} from '@/actions/analytics';
 import { RevenueCards } from '@/components/dashboard/analytics/revenue-cards';
 import { TopItemsList } from '@/components/dashboard/analytics/top-items-list';
 import { OrderVolumeChart } from '@/components/dashboard/analytics/order-volume-chart';
@@ -19,8 +23,10 @@ export default async function AnalyticsPage({
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Analytics</h1>
-        <p className="text-sm text-muted-foreground mt-1">
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+          Analytics
+        </h1>
+        <p className="text-sm text-gray-500 mt-1">
           Business performance overview for your venue
         </p>
       </div>

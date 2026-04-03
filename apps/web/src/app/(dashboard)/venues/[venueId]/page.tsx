@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { fetchApi } from '@/lib/api';
 import { VenueSettingsForm } from '@/components/dashboard/venue-settings-form';
-import { Badge } from '@/components/ui/badge';
 
 interface Venue {
   id: string;
@@ -35,25 +34,28 @@ export default async function VenueSettingsPage({
     if (message.includes('404') || message.includes('not found')) {
       notFound();
     }
-    // If unauthorized or other error, show not found
     notFound();
   }
 
   return (
     <div className="max-w-2xl">
-      <div className="mb-6">
+      <div className="mb-8">
         <Link
           href="/dashboard"
-          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 transition-colors mb-6"
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-3.5 w-3.5" />
           Back to Dashboard
         </Link>
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold">{venue.name}</h1>
-          <Badge variant="outline">{PAYMENT_MODE_LABELS[venue.paymentMode]}</Badge>
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+            {venue.name}
+          </h1>
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-50 text-orange-600 border border-orange-100">
+            {PAYMENT_MODE_LABELS[venue.paymentMode]}
+          </span>
         </div>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="text-sm text-gray-400 mt-1">
           Created {new Date(venue.createdAt).toLocaleDateString()}
         </p>
       </div>

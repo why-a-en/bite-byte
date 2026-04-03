@@ -12,10 +12,18 @@ export default async function OrdersPage({ params }: PageProps) {
   const cookieStore = await cookies();
   const token = cookieStore.get('access_token')?.value ?? '';
 
-  let initialOrders = await fetchActiveOrders(venueId).catch(() => []);
+  const initialOrders = await fetchActiveOrders(venueId).catch(() => []);
 
   return (
     <div className="flex flex-col h-full">
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+          Live Orders
+        </h1>
+        <p className="text-sm text-gray-500 mt-1">
+          Track and manage incoming orders in real time
+        </p>
+      </div>
       <OrdersBoard
         venueId={venueId}
         initialOrders={initialOrders}

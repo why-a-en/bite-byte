@@ -13,7 +13,6 @@ export default async function MenuPage({ params }: MenuPageProps) {
   let venueName = 'Menu';
 
   try {
-    // Fetch venue name for page title
     const venue = await fetchApi(`/venues/${venueId}`);
     venueName = venue.name ?? 'Menu';
   } catch {
@@ -28,16 +27,22 @@ export default async function MenuPage({ params }: MenuPageProps) {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">Menu Builder</h1>
-        <p className="text-sm text-muted-foreground mt-1">{venueName}</p>
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+          Menu Builder
+        </h1>
+        <p className="text-sm text-gray-500 mt-1">{venueName}</p>
       </div>
 
       {categories.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 text-center border rounded-lg bg-card">
-          <UtensilsCrossed className="h-12 w-12 text-muted-foreground mb-4" />
-          <h2 className="text-lg font-medium mb-2">No categories yet</h2>
-          <p className="text-sm text-muted-foreground mb-6 max-w-xs">
+        <div className="flex flex-col items-center justify-center py-20 text-center bg-white rounded-xl border border-gray-100">
+          <div className="w-14 h-14 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mb-5">
+            <UtensilsCrossed className="h-6 w-6 text-gray-300" />
+          </div>
+          <h2 className="text-lg font-medium text-gray-900 mb-2">
+            No categories yet
+          </h2>
+          <p className="text-sm text-gray-500 mb-8 max-w-xs leading-relaxed">
             Add your first category to start building your menu.
           </p>
           <CategoryList venueId={venueId} initialCategories={[]} />
