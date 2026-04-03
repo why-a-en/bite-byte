@@ -83,14 +83,13 @@ export default function MagneticCursor() {
           y,
           border: isHoveringMagnetic
             ? '2px solid rgba(249,115,22,1)'
-            : '2px solid rgba(255,255,255,0.7)',
+            : '2px solid rgba(0,0,0,0.5)',
           background: isHoveringMagnetic
             ? 'rgba(249,115,22,0.15)'
             : 'transparent',
           boxShadow: isHoveringMagnetic
             ? '0 0 20px rgba(249,115,22,0.5), 0 0 60px rgba(249,115,22,0.2)'
-            : '0 0 10px rgba(255,255,255,0.1)',
-          mixBlendMode: 'difference',
+            : '0 0 10px rgba(0,0,0,0.08)',
           transition: 'border-color 0.2s ease, background 0.2s ease, box-shadow 0.3s ease',
         }}
         animate={{
@@ -124,8 +123,7 @@ export default function MagneticCursor() {
           transition={{ duration: 0.2 }}
           style={{
             borderRadius: '50%',
-            background: '#ffffff',
-            mixBlendMode: 'difference',
+            background: '#1a1a1a',
           }}
         />
       </motion.div>
