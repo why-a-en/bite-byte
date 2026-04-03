@@ -36,7 +36,7 @@ function NavItem({
   exact = false,
 }: {
   href: string;
-  icon: React.ElementType;
+  icon: React.ComponentType<{ className?: string }>;
   children: React.ReactNode;
   exact?: boolean;
 }) {
