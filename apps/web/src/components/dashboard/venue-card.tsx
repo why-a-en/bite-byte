@@ -17,12 +17,12 @@ interface VenueCardProps {
 export function VenueCard({ venue }: VenueCardProps) {
   return (
     <Link href={`/venues/${venue.id}`}>
-      <Card className="hover:shadow-md transition-shadow cursor-pointer group">
+      <Card className="hover:shadow-md hover:border-primary/20 transition-shadow cursor-pointer group">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center">
-                <Store className="h-4 w-4 text-brand" />
+              <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center">
+                <Store className="h-5 w-5 text-brand" />
               </div>
               <CardTitle className="text-base">{venue.name}</CardTitle>
             </div>

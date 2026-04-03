@@ -96,7 +96,7 @@ export function OrderCard({ order, onStatusUpdate, isNew = false }: OrderCardPro
 
   return (
     <Card
-      className={`cursor-pointer border-l-4 ${borderColor} transition-all ${highlight ? 'animate-pulse' : ''}`}
+      className={`cursor-pointer border-l-[3px] ${borderColor} shadow-sm hover:shadow-md transition-shadow ${highlight ? 'animate-pulse' : ''}`}
       onClick={handleCardClick}
     >
       <CardContent className="p-3">
@@ -104,7 +104,7 @@ export function OrderCard({ order, onStatusUpdate, isNew = false }: OrderCardPro
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-mono font-semibold text-sm">{order.referenceCode}</span>
+              <span className="font-mono font-semibold text-sm bg-muted/50 px-1.5 py-0.5 rounded">{order.referenceCode}</span>
               <span className="text-sm font-medium truncate">{order.customerName}</span>
             </div>
             <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">

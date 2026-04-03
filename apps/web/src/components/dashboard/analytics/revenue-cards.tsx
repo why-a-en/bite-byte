@@ -29,7 +29,7 @@ function RevenueCard({
   amount: number;
 }) {
   return (
-    <Card>
+    <Card className="bg-gradient-to-br from-background to-muted/30">
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle className="text-sm font-medium text-muted-foreground">
           {title}
@@ -37,7 +37,8 @@ function RevenueCard({
         <PoundSterling className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <p className="text-2xl font-bold">{formatCurrency(amount)}</p>
+        <p className="text-3xl font-bold tracking-tight">{formatCurrency(amount)}</p>
+        <p className="text-xs text-emerald-600 mt-1">+0% vs last period</p>
       </CardContent>
     </Card>
   );

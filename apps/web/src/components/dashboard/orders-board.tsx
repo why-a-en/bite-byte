@@ -29,6 +29,12 @@ const COLUMN_HEADER_COLORS: Record<string, string> = {
   READY: 'text-green-700',
 };
 
+const COLUMN_BG_COLORS: Record<string, string> = {
+  RECEIVED: 'bg-blue-50',
+  PREPARING: 'bg-amber-50',
+  READY: 'bg-green-50',
+};
+
 export function OrdersBoard({ venueId, initialOrders, token }: OrdersBoardProps) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [connected, setConnected] = useState(false);
@@ -228,7 +234,7 @@ export function OrdersBoard({ venueId, initialOrders, token }: OrdersBoardProps)
       <div className="flex-1 overflow-auto p-4">
         {visibleOrders.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <ClipboardList className="h-16 w-16 text-muted-foreground/50 mb-4" />
+            <ClipboardList className="h-20 w-20 text-muted-foreground/50 mb-4" />
             <h2 className="text-lg font-medium mb-2">No active orders</h2>
             <p className="text-sm text-muted-foreground max-w-xs">
               Orders will appear here in real-time when customers place them.
@@ -240,8 +246,10 @@ export function OrdersBoard({ venueId, initialOrders, token }: OrdersBoardProps)
             const columnOrders = visibleOrders.filter((o) => o.status === status);
             const headerColor = COLUMN_HEADER_COLORS[status];
 
+            const columnBg = COLUMN_BG_COLORS[status] ?? '';
+
             return (
-              <div key={status} className="flex flex-col gap-3">
+              <div key={status} className={`flex flex-col gap-3 p-3 rounded-xl ${columnBg}`}>
                 {/* Column header */}
                 <div className="flex items-center gap-2">
                   <h2 className={`font-semibold text-sm uppercase tracking-wide ${headerColor}`}>
