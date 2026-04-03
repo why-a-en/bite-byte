@@ -29,7 +29,7 @@ export function ItemDetailSheet({ item, onClose, onAddToCart }: ItemDetailSheetP
           <>
             {/* Full-width image */}
             {item.imageUrl && (
-              <div className="h-56 w-full overflow-hidden">
+              <div className="h-64 w-full overflow-hidden rounded-t-xl">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={item.imageUrl}
@@ -41,7 +41,7 @@ export function ItemDetailSheet({ item, onClose, onAddToCart }: ItemDetailSheetP
 
             <DrawerHeader className="text-left">
               <DrawerTitle className="text-xl font-bold">{item.name}</DrawerTitle>
-              <p className="mt-1 text-lg font-semibold text-gray-900">
+              <p className="mt-1 text-2xl font-bold text-gray-900">
                 £{parseFloat(item.price).toFixed(2)}
               </p>
               {item.description && (
@@ -55,7 +55,7 @@ export function ItemDetailSheet({ item, onClose, onAddToCart }: ItemDetailSheetP
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="w-full rounded-full bg-black py-3 text-base font-semibold text-white transition-opacity hover:opacity-90 active:opacity-80"
+                className="w-full rounded-full bg-black py-4 text-lg font-semibold text-white transition-opacity hover:opacity-90 active:opacity-80"
               >
                 Add to Cart
               </button>

@@ -58,7 +58,7 @@ export function CartDrawer({
           ) : (
             <ul className="divide-y divide-gray-100">
               {items.map(item => (
-                <li key={item.menuItemId} className="flex items-center gap-4 px-4 py-3">
+                <li key={item.menuItemId} className="flex items-center gap-4 px-4 py-4">
                   {/* Item info */}
                   <div className="min-w-0 flex-1">
                     <p className="font-medium text-gray-900">{item.name}</p>
@@ -72,10 +72,10 @@ export function CartDrawer({
                     <button
                       type="button"
                       onClick={() => onUpdateQuantity(item.menuItemId, item.quantity - 1)}
-                      className="flex h-7 w-7 items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:border-gray-400 hover:bg-gray-50"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:border-gray-400 hover:bg-gray-50"
                       aria-label="Decrease quantity"
                     >
-                      <span className="text-base leading-none">−</span>
+                      <span className="text-lg leading-none">−</span>
                     </button>
 
                     <span className="w-6 text-center text-sm font-semibold tabular-nums">
@@ -85,10 +85,10 @@ export function CartDrawer({
                     <button
                       type="button"
                       onClick={() => onUpdateQuantity(item.menuItemId, item.quantity + 1)}
-                      className="flex h-7 w-7 items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:border-gray-400 hover:bg-gray-50"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:border-gray-400 hover:bg-gray-50"
                       aria-label="Increase quantity"
                     >
-                      <span className="text-base leading-none">+</span>
+                      <span className="text-lg leading-none">+</span>
                     </button>
                   </div>
 
@@ -125,7 +125,7 @@ export function CartDrawer({
             </div>
             <Link
               href={`/menu/${venueSlug}/checkout`}
-              className="block w-full rounded-full bg-black py-3 text-center text-base font-semibold text-white transition-opacity hover:opacity-90 active:opacity-80"
+              className="block w-full rounded-full bg-black py-4 text-center text-lg font-semibold text-white transition-opacity hover:opacity-90 active:opacity-80"
               onClick={onClose}
             >
               Checkout

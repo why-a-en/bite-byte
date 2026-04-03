@@ -35,8 +35,8 @@ export default async function OrderStatusPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-lg mx-auto px-4 py-6">
-        <h1 className="text-xl font-bold mb-1">Order Status</h1>
+      <div className="max-w-lg mx-auto px-4 py-8">
+        <h1 className="text-2xl font-bold tracking-tight mb-1">Order Status</h1>
         <p className="text-gray-500 text-sm mb-6">
           We&apos;ll update this page as your order progresses.
         </p>

@@ -40,7 +40,7 @@ export function MenuPage({ venue }: MenuPageProps) {
               className="h-10 w-10 rounded-full object-cover"
             />
           )}
-          <h1 className="text-xl font-bold text-gray-900">{venue.name}</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900">{venue.name}</h1>
         </div>
       </header>
 
@@ -50,7 +50,7 @@ export function MenuPage({ venue }: MenuPageProps) {
       )}
 
       {/* Menu categories and items */}
-      <main className="pb-28">
+      <main className="pb-32 max-w-lg mx-auto">
         {venue.categories.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-gray-400">
             <p className="text-base">No menu items available yet.</p>

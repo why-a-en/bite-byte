@@ -14,7 +14,7 @@ export function CartButton({ itemCount, total, onClick }: CartButtonProps) {
     <button
       type="button"
       onClick={onClick}
-      className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 flex items-center gap-3 rounded-full bg-black px-6 py-3 text-white shadow-xl transition-transform hover:scale-105 active:scale-95"
+      className="fixed bottom-8 left-1/2 z-50 -translate-x-1/2 flex items-center gap-3 rounded-full bg-black px-6 py-3.5 min-h-[52px] text-white shadow-2xl transition-transform hover:scale-105 active:scale-95"
     >
       <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-sm font-bold text-black">
         {itemCount}

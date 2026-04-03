@@ -209,7 +209,7 @@ export function CheckoutForm({ venue }: Props) {
           onChange={(e) => setCustomerName(e.target.value)}
           placeholder="Enter your name"
           required
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-black"
+          className="w-full border border-gray-300 rounded-lg px-4 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-black"
         />
       </div>
 
@@ -217,8 +217,14 @@ export function CheckoutForm({ venue }: Props) {
       {venue.paymentMode === 'BOTH' && (
         <div>
           <p className="block text-sm font-medium text-gray-700 mb-2">Payment method</p>
-          <div className="space-y-2">
-            <label className="flex items-center gap-3 cursor-pointer">
+          <div className="space-y-3">
+            <label
+              className={`flex items-center gap-3 cursor-pointer border rounded-xl p-4 transition-colors ${
+                paymentChoice === 'STRIPE'
+                  ? 'border-black bg-gray-50'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
               <input
                 type="radio"
                 name="paymentChoice"
@@ -227,9 +233,15 @@ export function CheckoutForm({ venue }: Props) {
                 onChange={() => setPaymentChoice('STRIPE')}
                 className="w-4 h-4"
               />
-              <span className="text-sm">Pay now (card / Apple Pay / Google Pay)</span>
+              <span className="text-base">Pay now (card / Apple Pay / Google Pay)</span>
             </label>
-            <label className="flex items-center gap-3 cursor-pointer">
+            <label
+              className={`flex items-center gap-3 cursor-pointer border rounded-xl p-4 transition-colors ${
+                paymentChoice === 'PAY_AT_COUNTER'
+                  ? 'border-black bg-gray-50'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
               <input
                 type="radio"
                 name="paymentChoice"
@@ -238,7 +250,7 @@ export function CheckoutForm({ venue }: Props) {
                 onChange={() => setPaymentChoice('PAY_AT_COUNTER')}
                 className="w-4 h-4"
               />
-              <span className="text-sm">Pay at counter</span>
+              <span className="text-base">Pay at counter</span>
             </label>
           </div>
         </div>
@@ -253,7 +265,7 @@ export function CheckoutForm({ venue }: Props) {
           </a>
         </div>
       ) : (
-        <div className="border border-gray-200 rounded-lg overflow-hidden">
+        <div className="border border-gray-200 rounded-xl overflow-hidden">
           <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
             <h2 className="font-semibold text-sm text-gray-700">Order Summary</h2>
           </div>
@@ -299,7 +311,7 @@ export function CheckoutForm({ venue }: Props) {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-black text-white py-3 rounded-lg font-semibold disabled:opacity-50 cursor-pointer"
+          className="w-full bg-black text-white py-4 text-lg rounded-xl font-semibold disabled:opacity-50 cursor-pointer"
         >
           {loading
             ? 'Processing...'

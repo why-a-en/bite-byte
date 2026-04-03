@@ -105,9 +105,9 @@ export function OrderStatus({ order, venueSlug }: Props) {
   return (
     <div className="space-y-6">
       {/* Reference code — prominent at top */}
-      <div className="bg-gray-50 rounded-lg px-4 py-4 text-center border border-gray-200">
+      <div className="bg-gray-50 rounded-lg px-6 py-6 text-center border border-gray-200">
         <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Order Reference</p>
-        <p className="text-3xl font-bold tracking-widest text-black">#{order.referenceCode}</p>
+        <p className="text-4xl font-bold tracking-widest text-black">#{order.referenceCode}</p>
         <p className="text-sm text-gray-600 mt-1">{order.customerName}&apos;s order</p>
       </div>
 
@@ -144,7 +144,7 @@ export function OrderStatus({ order, venueSlug }: Props) {
                 <div className="flex flex-col items-center">
                   <div
                     className={[
-                      'flex h-8 w-8 items-center justify-center rounded-full flex-shrink-0',
+                      'flex h-10 w-10 items-center justify-center rounded-full flex-shrink-0',
                       isComplete
                         ? 'bg-green-500 text-white'
                         : isCurrent
@@ -164,7 +164,7 @@ export function OrderStatus({ order, venueSlug }: Props) {
                   {index < STEPS.length - 1 && (
                     <div
                       className={[
-                        'w-0.5 h-8',
+                        'w-0.5 h-10',
                         isComplete ? 'bg-green-500' : 'bg-gray-200',
                       ].join(' ')}
                     />
@@ -175,7 +175,7 @@ export function OrderStatus({ order, venueSlug }: Props) {
                 <div className="pb-8 pt-1">
                   <p
                     className={[
-                      'font-medium',
+                      'text-base font-medium',
                       isComplete ? 'text-green-700' : isCurrent ? 'text-black' : 'text-gray-400',
                     ].join(' ')}
                   >
